@@ -9,6 +9,6 @@ export default defineConfig({
     url: env("DATABASE_URL"),
   },
   migrations: {
-    path: "prisma/migrations",
+    seed: "tsx prisma/seed.ts",
   },
 });
