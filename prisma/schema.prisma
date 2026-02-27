@@ -1,0 +1,226 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================
+// BUSINESS MODELS - Multi-tenant Architecture
+// ============================================
+
+/// Tenant (Patron) - Root entity for multi-tenant isolation
+model Tenant {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  company   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  sites     Site[]
+  employees Employee[]
+  clockIns  ClockIn[]
+  qrTokens  QrToken[]
+  anomalies Anomaly[]
+  users     User[]
+
+  @@map("tenants")
+}
+
+/// Site (Lieu de travail) - Physical location with QR code
+model Site {
+  id        String   @id @default(cuid())
+  tenantId  String
+  name      String
+  address   String?
+  qrCodeUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  clockIns ClockIn[]
+  qrTokens QrToken[]
+
+  @@index([tenantId])
+  @@map("sites")
+}
+
+/// Employee (Salarié) - Worker with auto-registration support
+model Employee {
+  id        String   @id @default(cuid())
+  tenantId  String
+  firstName String
+  lastName  String
+  email     String?
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  clockIns ClockIn[]
+
+  @@index([tenantId, isActive])
+  @@map("employees")
+}
+
+/// ClockIn (Pointage) - Time tracking event
+model ClockIn {
+  id         String        @id @default(cuid())
+  tenantId   String
+  siteId     String
+  employeeId String
+  action     ClockInAction
+  timestamp  DateTime      @default(now())
+  createdAt  DateTime      @default(now())
+
+  // Relations
+  tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  site     Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  anomalies Anomaly[]
+
+  @@index([tenantId, siteId, employeeId, timestamp])
+  @@map("clock_ins")
+}
+
+/// QrToken (Token QR) - Single-use token for secure clock-in
+model QrToken {
+  id        String    @id @default(cuid())
+  tenantId  String
+  siteId    String
+  token     String    @unique
+  used      Boolean   @default(false)
+  usedAt    DateTime?
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+
+  // Relations
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
+
+  @@index([token, used, expiresAt])
+  @@map("qr_tokens")
+}
+
+/// Anomaly (Anomalie) - Detected suspicious pattern
+model Anomaly {
+  id                String        @id @default(cuid())
+  tenantId          String
+  type              AnomalyType
+  description       String
+  status            AnomalyStatus @default(PENDING)
+  relatedClockInId  String?
+  createdAt         DateTime      @default(now())
+  resolvedAt        DateTime?
+
+  // Relations
+  tenant         Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  relatedClockIn ClockIn? @relation(fields: [relatedClockInId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, status])
+  @@map("anomalies")
+}
+
+// ============================================
+// NEXTAUTH MODELS
+// ============================================
+
+/// User (NextAuth) - Authentication user
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  tenantId      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  tenant   Tenant?   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  accounts Account[]
+  sessions Session[]
+
+  @@map("users")
+}
+
+/// Account (NextAuth) - OAuth accounts
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@map("accounts")
+}
+
+/// Session (NextAuth) - User sessions
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+/// VerificationToken (NextAuth) - Email verification tokens
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+  @@map("verification_tokens")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum ClockInAction {
+  START
+  PAUSE
+  END
+}
+
+enum AnomalyType {
+  DUPLICATE_CLOCK_IN      // 2 pointages même employé en < 5 min
+  IMPOSSIBLE_HOURS        // Pointage à des heures impossibles (ex: 3h du matin)
+  MISSING_END             // Début sans fin de journée
+  EXCESSIVE_HOURS         // Plus de 12h de travail sans pause
+  SUSPICIOUS_PATTERN      // Pattern suspect détecté
+}
+
+enum AnomalyStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+}
