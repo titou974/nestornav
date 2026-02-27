@@ -1,6 +1,6 @@
 "use client";
 
-import { Employee } from "@prisma/client";
+import { Employee } from "@/types/database";
 import { Button, Label, Select, ListBox } from "@heroui/react";
 
 interface EmployeeSelectorProps {

@@ -1,7 +1,7 @@
 import { Alert } from "@heroui/react";
 import { PointageForm } from "./pointage-form";
 import { prisma } from "@/lib/prisma";
-import { Employee } from "@prisma/client";
+import { Employee } from "@/types/database";
 
 interface PointagePageProps {
   searchParams: Promise<{ token?: string }>;

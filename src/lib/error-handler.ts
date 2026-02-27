@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { ZodError } from "zod";
-import { Prisma } from "@prisma/client";
 
 export function handleApiError(error: unknown) {
   console.error("API Error:", error);
@@ -17,10 +16,12 @@ export function handleApiError(error: unknown) {
     );
   }
 
-  // Prisma errors
-  if (error instanceof Prisma.PrismaClientKnownRequestError) {
+  // Prisma errors - check by error code instead of instanceof
+  if (error && typeof error === "object" && "code" in error) {
+    const prismaError = error as { code: string };
+
     // Unique constraint violation
-    if (error.code === "P2002") {
+    if (prismaError.code === "P2002") {
       return NextResponse.json(
         {
           success: false,
@@ -31,7 +32,7 @@ export function handleApiError(error: unknown) {
     }
 
     // Record not found
-    if (error.code === "P2025") {
+    if (prismaError.code === "P2025") {
       return NextResponse.json(
         {
           success: false,

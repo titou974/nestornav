@@ -1,77 +1,173 @@
-import type { Prisma } from "@prisma/client";
-
 // ============================================
-// RE-EXPORT PRISMA TYPES
+// ENUMS (as string literal types for compatibility)
 // ============================================
 
-export type {
-  Tenant,
-  Site,
-  Employee,
-  ClockIn,
-  QrToken,
-  Anomaly,
-  User,
-  Account,
-  Session,
-  VerificationToken,
-  ClockInAction,
-  AnomalyType,
-  AnomalyStatus,
-} from "@prisma/client";
+export type ClockInAction = "START" | "PAUSE" | "END";
+
+export type AnomalyType =
+  | "DUPLICATE_CLOCK_IN"
+  | "IMPOSSIBLE_HOURS"
+  | "MISSING_END"
+  | "EXCESSIVE_HOURS"
+  | "SUSPICIOUS_PATTERN";
+
+export type AnomalyStatus = "PENDING" | "REVIEWED" | "RESOLVED";
+
+// ============================================
+// BASE MODELS
+// ============================================
+
+export interface Tenant {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  company: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Site {
+  id: string;
+  tenantId: string;
+  name: string;
+  address: string | null;
+  qrCodeUrl: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Employee {
+  id: string;
+  tenantId: string;
+  firstName: string;
+  lastName: string;
+  email: string | null;
+  phone: string | null;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ClockIn {
+  id: string;
+  tenantId: string;
+  siteId: string;
+  employeeId: string;
+  action: ClockInAction;
+  timestamp: Date;
+  createdAt: Date;
+}
+
+export interface QrToken {
+  id: string;
+  tenantId: string;
+  siteId: string;
+  token: string;
+  used: boolean;
+  usedAt: Date | null;
+  expiresAt: Date;
+  createdAt: Date;
+}
+
+export interface Anomaly {
+  id: string;
+  tenantId: string;
+  type: AnomalyType;
+  description: string;
+  status: AnomalyStatus;
+  relatedClockInId: string | null;
+  createdAt: Date;
+  resolvedAt: Date | null;
+}
+
+export interface User {
+  id: string;
+  name: string | null;
+  email: string;
+  emailVerified: Date | null;
+  image: string | null;
+  tenantId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Account {
+  userId: string;
+  type: string;
+  provider: string;
+  providerAccountId: string;
+  refresh_token: string | null;
+  access_token: string | null;
+  expires_at: number | null;
+  token_type: string | null;
+  scope: string | null;
+  id_token: string | null;
+  session_state: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Session {
+  sessionToken: string;
+  userId: string;
+  expires: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface VerificationToken {
+  identifier: string;
+  token: string;
+  expires: Date;
+}
 
 // ============================================
 // UTILITY TYPES WITH RELATIONS
 // ============================================
 
-export type TenantWithSites = Prisma.TenantGetPayload<{
-  include: { sites: true };
-}>;
+export interface TenantWithSites extends Tenant {
+  sites: Site[];
+}
 
-export type TenantWithEmployees = Prisma.TenantGetPayload<{
-  include: { employees: true };
-}>;
+export interface TenantWithEmployees extends Tenant {
+  employees: Employee[];
+}
 
-export type TenantWithAll = Prisma.TenantGetPayload<{
-  include: {
-    sites: true;
-    employees: true;
-    clockIns: true;
-    qrTokens: true;
-    anomalies: true;
-  };
-}>;
+export interface TenantWithAll extends Tenant {
+  sites: Site[];
+  employees: Employee[];
+  clockIns: ClockIn[];
+  qrTokens: QrToken[];
+  anomalies: Anomaly[];
+}
 
-export type SiteWithClockIns = Prisma.SiteGetPayload<{
-  include: { clockIns: true };
-}>;
+export interface SiteWithClockIns extends Site {
+  clockIns: ClockIn[];
+}
 
-export type SiteWithQrTokens = Prisma.SiteGetPayload<{
-  include: { qrTokens: true };
-}>;
+export interface SiteWithQrTokens extends Site {
+  qrTokens: QrToken[];
+}
 
-export type EmployeeWithClockIns = Prisma.EmployeeGetPayload<{
-  include: { clockIns: true };
-}>;
+export interface EmployeeWithClockIns extends Employee {
+  clockIns: ClockIn[];
+}
 
-export type ClockInWithRelations = Prisma.ClockInGetPayload<{
-  include: {
-    tenant: true;
-    site: true;
-    employee: true;
-  };
-}>;
+export interface ClockInWithRelations extends ClockIn {
+  tenant: Tenant;
+  site: Site;
+  employee: Employee;
+}
 
-export type AnomalyWithRelations = Prisma.AnomalyGetPayload<{
-  include: {
-    tenant: true;
-    relatedClockIn: true;
-  };
-}>;
+export interface AnomalyWithRelations extends Anomaly {
+  tenant: Tenant;
+  relatedClockIn: ClockIn | null;
+}
 
-export type UserWithTenant = Prisma.UserGetPayload<{
-  include: { tenant: true };
-}>;
+export interface UserWithTenant extends User {
+  tenant: Tenant | null;
+}
 
 // ============================================
 // QUERY RESULT TYPES

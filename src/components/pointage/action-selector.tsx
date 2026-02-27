@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@heroui/react";
-import { ClockInAction } from "@prisma/client";
+import { ClockInAction } from "@/types/database";
 
 interface ActionSelectorProps {
   onSelectAction: (action: ClockInAction) => void;

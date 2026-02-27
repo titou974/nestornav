@@ -1,7 +1,7 @@
 "use client";
 
 import { Alert, Button } from "@heroui/react";
-import { ClockInAction } from "@prisma/client";
+import { ClockInAction } from "@/types/database";
 
 interface ConfirmationMessageProps {
   employeeName: string;
@@ -49,7 +49,9 @@ export function ConfirmationMessage({
 
       <div className="bg-surface rounded-lg border border-border p-6 space-y-4">
         <div className="text-center">
-          <div className="text-4xl font-bold text-accent mb-2">{formattedTime}</div>
+          <div className="text-4xl font-bold text-accent mb-2">
+            {formattedTime}
+          </div>
           <div className="text-sm text-muted">{formattedDate}</div>
         </div>
 

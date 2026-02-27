@@ -1,6 +1,6 @@
 "use client";
 
-import { Employee, ClockInAction, ClockIn } from "@prisma/client";
+import { Employee, ClockInAction, ClockIn } from "@/types/database";
 import {
   Alert,
   Button,
