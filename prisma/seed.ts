@@ -246,7 +246,7 @@ async function main() {
   console.log(`   - 1 tenant: ${tenant.email}`);
   console.log(`   - 2 sites`);
   console.log(
-    `   - ${employees.length} employees (${employees.filter((e) => e.isActive).length} active)`,
+    `   - ${employees.length} employees (${employees.filter((e: { isActive: boolean }) => e.isActive).length} active)`,
   );
   console.log(`   - ${clockIns.length} clock-ins`);
   console.log(`   - ${qrTokens.length} QR tokens`);
