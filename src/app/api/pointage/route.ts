@@ -19,21 +19,32 @@ export async function POST(request: NextRequest) {
       return successResponse({ success: false, error: "Site non trouvé" }, 404);
     }
 
-    // Générer un token unique pour ce pointage
+    // Créer un QrToken puis le ClockIn
     const uniqueToken = `api-${Date.now()}-${Math.random().toString(36).substring(7)}`;
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
 
+    // Créer le QrToken
+    const qrToken = await prisma.qrToken.create({
+      data: {
+        tenantId: site.tenantId,
+        siteId: validated.siteId,
+        token: uniqueToken,
+        consumed: true,
+        consumedAt: new Date(),
+        expiresAt: tomorrow,
+      },
+    });
+
+    // Créer le ClockIn avec le qrTokenId
     const clockIn = await prisma.clockIn.create({
       data: {
         tenantId: site.tenantId,
         siteId: validated.siteId,
         employeeId: validated.employeeId,
+        qrTokenId: qrToken.id,
         action: validated.action,
         timestamp: validated.timestamp || new Date(),
-        token: uniqueToken,
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: tomorrow,
       },
       include: {
         employee: true,

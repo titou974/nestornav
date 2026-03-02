@@ -8,6 +8,7 @@ async function main() {
   // Clean existing data
   console.log("🧹 Cleaning existing data...");
   await prisma.clockIn.deleteMany();
+  await prisma.qrToken.deleteMany();
   await prisma.anomaly.deleteMany();
   await prisma.employee.deleteMany();
   await prisma.site.deleteMany();
@@ -106,13 +107,82 @@ async function main() {
 
   console.log(`✅ Created ${employees.length} employees`);
 
-  // Create clock-ins for today
-  console.log("⏰ Creating clock-ins...");
+  // Create QR tokens first
+  console.log("🔑 Creating QR tokens...");
   const today = new Date();
   today.setHours(8, 0, 0, 0);
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
 
+  const qrTokens = await Promise.all([
+    // Tokens for site 1
+    prisma.qrToken.create({
+      data: {
+        tenantId: tenant.id,
+        siteId: site1.id,
+        token: `seed-token-${Date.now()}-1`,
+        consumed: true,
+        consumedAt: new Date(today.getTime()),
+        expiresAt: tomorrow,
+      },
+    }),
+    prisma.qrToken.create({
+      data: {
+        tenantId: tenant.id,
+        siteId: site1.id,
+        token: `seed-token-${Date.now()}-2`,
+        consumed: true,
+        consumedAt: new Date(today.getTime() + 4 * 60 * 60 * 1000),
+        expiresAt: tomorrow,
+      },
+    }),
+    prisma.qrToken.create({
+      data: {
+        tenantId: tenant.id,
+        siteId: site1.id,
+        token: `seed-token-${Date.now()}-3`,
+        consumed: true,
+        consumedAt: new Date(today.getTime() + 5 * 60 * 60 * 1000),
+        expiresAt: tomorrow,
+      },
+    }),
+    prisma.qrToken.create({
+      data: {
+        tenantId: tenant.id,
+        siteId: site1.id,
+        token: `seed-token-${Date.now()}-4`,
+        consumed: true,
+        consumedAt: new Date(today.getTime() + 9 * 60 * 60 * 1000),
+        expiresAt: tomorrow,
+      },
+    }),
+    prisma.qrToken.create({
+      data: {
+        tenantId: tenant.id,
+        siteId: site1.id,
+        token: `seed-token-${Date.now()}-5`,
+        consumed: true,
+        consumedAt: new Date(today.getTime() + 0.25 * 60 * 60 * 1000),
+        expiresAt: tomorrow,
+      },
+    }),
+    // Token for site 2
+    prisma.qrToken.create({
+      data: {
+        tenantId: tenant.id,
+        siteId: site2.id,
+        token: `seed-token-${Date.now()}-6`,
+        consumed: true,
+        consumedAt: new Date(today.getTime() + 0.5 * 60 * 60 * 1000),
+        expiresAt: tomorrow,
+      },
+    }),
+  ]);
+
+  console.log(`✅ Created ${qrTokens.length} QR tokens`);
+
+  // Create clock-ins using the QR tokens
+  console.log("⏰ Creating clock-ins...");
   const clockIns = await Promise.all([
     // Pierre - Full day at site 1
     prisma.clockIn.create({
@@ -120,11 +190,9 @@ async function main() {
         tenantId: tenant.id,
         siteId: site1.id,
         employeeId: employees[0].id,
+        qrTokenId: qrTokens[0].id,
         action: "START",
         timestamp: new Date(today.getTime()),
-        token: `seed-token-${Date.now()}-1`,
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: tomorrow,
       },
     }),
     prisma.clockIn.create({
@@ -132,11 +200,9 @@ async function main() {
         tenantId: tenant.id,
         siteId: site1.id,
         employeeId: employees[0].id,
+        qrTokenId: qrTokens[1].id,
         action: "PAUSE",
         timestamp: new Date(today.getTime() + 4 * 60 * 60 * 1000), // 12:00
-        token: `seed-token-${Date.now()}-2`,
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: tomorrow,
       },
     }),
     prisma.clockIn.create({
@@ -144,11 +210,9 @@ async function main() {
         tenantId: tenant.id,
         siteId: site1.id,
         employeeId: employees[0].id,
+        qrTokenId: qrTokens[2].id,
         action: "START",
         timestamp: new Date(today.getTime() + 5 * 60 * 60 * 1000), // 13:00
-        token: `seed-token-${Date.now()}-3`,
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: tomorrow,
       },
     }),
     prisma.clockIn.create({
@@ -156,11 +220,9 @@ async function main() {
         tenantId: tenant.id,
         siteId: site1.id,
         employeeId: employees[0].id,
+        qrTokenId: qrTokens[3].id,
         action: "END",
         timestamp: new Date(today.getTime() + 9 * 60 * 60 * 1000), // 17:00
-        token: `seed-token-${Date.now()}-4`,
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: tomorrow,
       },
     }),
 
@@ -170,11 +232,9 @@ async function main() {
         tenantId: tenant.id,
         siteId: site2.id,
         employeeId: employees[1].id,
+        qrTokenId: qrTokens[5].id,
         action: "START",
         timestamp: new Date(today.getTime() + 0.5 * 60 * 60 * 1000), // 08:30
-        token: `seed-token-${Date.now()}-5`,
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: tomorrow,
       },
     }),
 
@@ -184,19 +244,14 @@ async function main() {
         tenantId: tenant.id,
         siteId: site1.id,
         employeeId: employees[2].id,
+        qrTokenId: qrTokens[4].id,
         action: "START",
         timestamp: new Date(today.getTime() + 0.25 * 60 * 60 * 1000), // 08:15
-        token: `seed-token-${Date.now()}-6`,
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: tomorrow,
       },
     }),
   ]);
 
-  console.log(`✅ Created ${clockIns.length} clock-ins`);
-
-  // Note: QR tokens sont maintenant intégrés dans ClockIn
-  console.log("✅ QR tokens are now integrated into ClockIn records");
+  console.log(`✅ Created ${clockIns.length} clock-ins (linked to QR tokens)`);
 
   // Create anomaly
   console.log("⚠️  Creating anomaly...");
