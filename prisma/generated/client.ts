@@ -55,8 +55,13 @@ export type Site = Prisma.SiteModel
  */
 export type Employee = Prisma.EmployeeModel
 /**
+ * Model QrToken
+ * QrToken - QR code token for site access
+ */
+export type QrToken = Prisma.QrTokenModel
+/**
  * Model ClockIn
- * ClockIn (Pointage) - Time tracking event with QR token info
+ * ClockIn (Pointage) - Time tracking event
  */
 export type ClockIn = Prisma.ClockInModel
 /**

@@ -201,6 +201,7 @@ export type TenantWhereInput = {
   sites?: Prisma.SiteListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
   clockIns?: Prisma.ClockInListRelationFilter
+  qrTokens?: Prisma.QrTokenListRelationFilter
   anomalies?: Prisma.AnomalyListRelationFilter
   users?: Prisma.UserListRelationFilter
 }
@@ -216,6 +217,7 @@ export type TenantOrderByWithRelationInput = {
   sites?: Prisma.SiteOrderByRelationAggregateInput
   employees?: Prisma.EmployeeOrderByRelationAggregateInput
   clockIns?: Prisma.ClockInOrderByRelationAggregateInput
+  qrTokens?: Prisma.QrTokenOrderByRelationAggregateInput
   anomalies?: Prisma.AnomalyOrderByRelationAggregateInput
   users?: Prisma.UserOrderByRelationAggregateInput
 }
@@ -234,6 +236,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   sites?: Prisma.SiteListRelationFilter
   employees?: Prisma.EmployeeListRelationFilter
   clockIns?: Prisma.ClockInListRelationFilter
+  qrTokens?: Prisma.QrTokenListRelationFilter
   anomalies?: Prisma.AnomalyListRelationFilter
   users?: Prisma.UserListRelationFilter
 }, "id" | "email">
@@ -275,6 +278,7 @@ export type TenantCreateInput = {
   sites?: Prisma.SiteCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
 }
@@ -290,6 +294,7 @@ export type TenantUncheckedCreateInput = {
   sites?: Prisma.SiteUncheckedCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -305,6 +310,7 @@ export type TenantUpdateInput = {
   sites?: Prisma.SiteUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
 }
@@ -320,6 +326,7 @@ export type TenantUncheckedUpdateInput = {
   sites?: Prisma.SiteUncheckedUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -430,6 +437,20 @@ export type TenantUpdateOneRequiredWithoutEmployeesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutEmployeesInput, Prisma.TenantUpdateWithoutEmployeesInput>, Prisma.TenantUncheckedUpdateWithoutEmployeesInput>
 }
 
+export type TenantCreateNestedOneWithoutQrTokensInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutQrTokensInput, Prisma.TenantUncheckedCreateWithoutQrTokensInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutQrTokensInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutQrTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutQrTokensInput, Prisma.TenantUncheckedCreateWithoutQrTokensInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutQrTokensInput
+  upsert?: Prisma.TenantUpsertWithoutQrTokensInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutQrTokensInput, Prisma.TenantUpdateWithoutQrTokensInput>, Prisma.TenantUncheckedUpdateWithoutQrTokensInput>
+}
+
 export type TenantCreateNestedOneWithoutClockInsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutClockInsInput, Prisma.TenantUncheckedCreateWithoutClockInsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutClockInsInput
@@ -484,6 +505,7 @@ export type TenantCreateWithoutSitesInput = {
   updatedAt?: Date | string
   employees?: Prisma.EmployeeCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
 }
@@ -498,6 +520,7 @@ export type TenantUncheckedCreateWithoutSitesInput = {
   updatedAt?: Date | string
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -528,6 +551,7 @@ export type TenantUpdateWithoutSitesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employees?: Prisma.EmployeeUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
 }
@@ -542,6 +566,7 @@ export type TenantUncheckedUpdateWithoutSitesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -556,6 +581,7 @@ export type TenantCreateWithoutEmployeesInput = {
   updatedAt?: Date | string
   sites?: Prisma.SiteCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
 }
@@ -570,6 +596,7 @@ export type TenantUncheckedCreateWithoutEmployeesInput = {
   updatedAt?: Date | string
   sites?: Prisma.SiteUncheckedCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -600,6 +627,7 @@ export type TenantUpdateWithoutEmployeesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sites?: Prisma.SiteUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
 }
@@ -613,6 +641,83 @@ export type TenantUncheckedUpdateWithoutEmployeesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sites?: Prisma.SiteUncheckedUpdateManyWithoutTenantNestedInput
+  clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutTenantNestedInput
+  anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutQrTokensInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  company: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sites?: Prisma.SiteCreateNestedManyWithoutTenantInput
+  employees?: Prisma.EmployeeCreateNestedManyWithoutTenantInput
+  clockIns?: Prisma.ClockInCreateNestedManyWithoutTenantInput
+  anomalies?: Prisma.AnomalyCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutQrTokensInput = {
+  id?: string
+  email: string
+  password: string
+  name: string
+  company: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  sites?: Prisma.SiteUncheckedCreateNestedManyWithoutTenantInput
+  employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutTenantInput
+  clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutTenantInput
+  anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutTenantInput
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutQrTokensInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutQrTokensInput, Prisma.TenantUncheckedCreateWithoutQrTokensInput>
+}
+
+export type TenantUpsertWithoutQrTokensInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutQrTokensInput, Prisma.TenantUncheckedUpdateWithoutQrTokensInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutQrTokensInput, Prisma.TenantUncheckedCreateWithoutQrTokensInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutQrTokensInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutQrTokensInput, Prisma.TenantUncheckedUpdateWithoutQrTokensInput>
+}
+
+export type TenantUpdateWithoutQrTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sites?: Prisma.SiteUpdateManyWithoutTenantNestedInput
+  employees?: Prisma.EmployeeUpdateManyWithoutTenantNestedInput
+  clockIns?: Prisma.ClockInUpdateManyWithoutTenantNestedInput
+  anomalies?: Prisma.AnomalyUpdateManyWithoutTenantNestedInput
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutQrTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  password?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  company?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  sites?: Prisma.SiteUncheckedUpdateManyWithoutTenantNestedInput
+  employees?: Prisma.EmployeeUncheckedUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
@@ -628,6 +733,7 @@ export type TenantCreateWithoutClockInsInput = {
   updatedAt?: Date | string
   sites?: Prisma.SiteCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
 }
@@ -642,6 +748,7 @@ export type TenantUncheckedCreateWithoutClockInsInput = {
   updatedAt?: Date | string
   sites?: Prisma.SiteUncheckedCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -672,6 +779,7 @@ export type TenantUpdateWithoutClockInsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sites?: Prisma.SiteUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
 }
@@ -686,6 +794,7 @@ export type TenantUncheckedUpdateWithoutClockInsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sites?: Prisma.SiteUncheckedUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -701,6 +810,7 @@ export type TenantCreateWithoutAnomaliesInput = {
   sites?: Prisma.SiteCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutTenantInput
   users?: Prisma.UserCreateNestedManyWithoutTenantInput
 }
 
@@ -715,6 +825,7 @@ export type TenantUncheckedCreateWithoutAnomaliesInput = {
   sites?: Prisma.SiteUncheckedCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutTenantInput
   users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -745,6 +856,7 @@ export type TenantUpdateWithoutAnomaliesInput = {
   sites?: Prisma.SiteUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUpdateManyWithoutTenantNestedInput
 }
 
@@ -759,6 +871,7 @@ export type TenantUncheckedUpdateWithoutAnomaliesInput = {
   sites?: Prisma.SiteUncheckedUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutTenantNestedInput
   users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -773,6 +886,7 @@ export type TenantCreateWithoutUsersInput = {
   sites?: Prisma.SiteCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutTenantInput
 }
 
@@ -787,6 +901,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   sites?: Prisma.SiteUncheckedCreateNestedManyWithoutTenantInput
   employees?: Prisma.EmployeeUncheckedCreateNestedManyWithoutTenantInput
   clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutTenantInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutTenantInput
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutTenantInput
 }
 
@@ -817,6 +932,7 @@ export type TenantUpdateWithoutUsersInput = {
   sites?: Prisma.SiteUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutTenantNestedInput
 }
 
@@ -831,6 +947,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   sites?: Prisma.SiteUncheckedUpdateManyWithoutTenantNestedInput
   employees?: Prisma.EmployeeUncheckedUpdateManyWithoutTenantNestedInput
   clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutTenantNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutTenantNestedInput
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutTenantNestedInput
 }
 
@@ -843,6 +960,7 @@ export type TenantCountOutputType = {
   sites: number
   employees: number
   clockIns: number
+  qrTokens: number
   anomalies: number
   users: number
 }
@@ -851,6 +969,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   sites?: boolean | TenantCountOutputTypeCountSitesArgs
   employees?: boolean | TenantCountOutputTypeCountEmployeesArgs
   clockIns?: boolean | TenantCountOutputTypeCountClockInsArgs
+  qrTokens?: boolean | TenantCountOutputTypeCountQrTokensArgs
   anomalies?: boolean | TenantCountOutputTypeCountAnomaliesArgs
   users?: boolean | TenantCountOutputTypeCountUsersArgs
 }
@@ -889,6 +1008,13 @@ export type TenantCountOutputTypeCountClockInsArgs<ExtArgs extends runtime.Types
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountQrTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QrTokenWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountAnomaliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AnomalyWhereInput
 }
@@ -912,6 +1038,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   sites?: boolean | Prisma.Tenant$sitesArgs<ExtArgs>
   employees?: boolean | Prisma.Tenant$employeesArgs<ExtArgs>
   clockIns?: boolean | Prisma.Tenant$clockInsArgs<ExtArgs>
+  qrTokens?: boolean | Prisma.Tenant$qrTokensArgs<ExtArgs>
   anomalies?: boolean | Prisma.Tenant$anomaliesArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
@@ -952,6 +1079,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   sites?: boolean | Prisma.Tenant$sitesArgs<ExtArgs>
   employees?: boolean | Prisma.Tenant$employeesArgs<ExtArgs>
   clockIns?: boolean | Prisma.Tenant$clockInsArgs<ExtArgs>
+  qrTokens?: boolean | Prisma.Tenant$qrTokensArgs<ExtArgs>
   anomalies?: boolean | Prisma.Tenant$anomaliesArgs<ExtArgs>
   users?: boolean | Prisma.Tenant$usersArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
@@ -965,6 +1093,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     sites: Prisma.$SitePayload<ExtArgs>[]
     employees: Prisma.$EmployeePayload<ExtArgs>[]
     clockIns: Prisma.$ClockInPayload<ExtArgs>[]
+    qrTokens: Prisma.$QrTokenPayload<ExtArgs>[]
     anomalies: Prisma.$AnomalyPayload<ExtArgs>[]
     users: Prisma.$UserPayload<ExtArgs>[]
   }
@@ -1373,6 +1502,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   sites<T extends Prisma.Tenant$sitesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$sitesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   employees<T extends Prisma.Tenant$employeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$employeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   clockIns<T extends Prisma.Tenant$clockInsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$clockInsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClockInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  qrTokens<T extends Prisma.Tenant$qrTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$qrTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QrTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   anomalies<T extends Prisma.Tenant$anomaliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$anomaliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnomalyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   users<T extends Prisma.Tenant$usersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$usersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
@@ -1868,6 +1998,30 @@ export type Tenant$clockInsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ClockInScalarFieldEnum | Prisma.ClockInScalarFieldEnum[]
+}
+
+/**
+ * Tenant.qrTokens
+ */
+export type Tenant$qrTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the QrToken
+   */
+  select?: Prisma.QrTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the QrToken
+   */
+  omit?: Prisma.QrTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QrTokenInclude<ExtArgs> | null
+  where?: Prisma.QrTokenWhereInput
+  orderBy?: Prisma.QrTokenOrderByWithRelationInput | Prisma.QrTokenOrderByWithRelationInput[]
+  cursor?: Prisma.QrTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QrTokenScalarFieldEnum | Prisma.QrTokenScalarFieldEnum[]
 }
 
 /**

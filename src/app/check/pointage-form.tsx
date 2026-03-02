@@ -28,10 +28,10 @@ import { PlayIcon, PauseIcon, StopIcon } from "@heroicons/react/24/solid";
 import { FR_STRINGS } from "@/constants/fr.strings";
 
 interface TokenData {
+  qrTokenId: string;
   siteId: string;
   siteName: string;
   tenantId: string;
-  token: string;
   employees: Employee[];
 }
 
@@ -177,7 +177,7 @@ export function PointageForm({
       employeeId: selectedEmployeeId,
       action,
       tenantId: tokenData.tenantId,
-      token: tokenData.token,
+      qrTokenId: tokenData.qrTokenId,
     });
 
     if (result.success) {

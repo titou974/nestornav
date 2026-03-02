@@ -14,7 +14,7 @@ import type * as Prisma from "../internal/prismaNamespace.ts"
 
 /**
  * Model ClockIn
- * ClockIn (Pointage) - Time tracking event with QR token info
+ * ClockIn (Pointage) - Time tracking event
  */
 export type ClockInModel = runtime.Types.Result.DefaultSelection<Prisma.$ClockInPayload>
 
@@ -29,12 +29,10 @@ export type ClockInMinAggregateOutputType = {
   tenantId: string | null
   siteId: string | null
   employeeId: string | null
+  qrTokenId: string | null
   action: $Enums.ClockInAction | null
   timestamp: Date | null
   createdAt: Date | null
-  token: string | null
-  tokenUsedAt: Date | null
-  tokenExpiresAt: Date | null
 }
 
 export type ClockInMaxAggregateOutputType = {
@@ -42,12 +40,10 @@ export type ClockInMaxAggregateOutputType = {
   tenantId: string | null
   siteId: string | null
   employeeId: string | null
+  qrTokenId: string | null
   action: $Enums.ClockInAction | null
   timestamp: Date | null
   createdAt: Date | null
-  token: string | null
-  tokenUsedAt: Date | null
-  tokenExpiresAt: Date | null
 }
 
 export type ClockInCountAggregateOutputType = {
@@ -55,12 +51,10 @@ export type ClockInCountAggregateOutputType = {
   tenantId: number
   siteId: number
   employeeId: number
+  qrTokenId: number
   action: number
   timestamp: number
   createdAt: number
-  token: number
-  tokenUsedAt: number
-  tokenExpiresAt: number
   _all: number
 }
 
@@ -70,12 +64,10 @@ export type ClockInMinAggregateInputType = {
   tenantId?: true
   siteId?: true
   employeeId?: true
+  qrTokenId?: true
   action?: true
   timestamp?: true
   createdAt?: true
-  token?: true
-  tokenUsedAt?: true
-  tokenExpiresAt?: true
 }
 
 export type ClockInMaxAggregateInputType = {
@@ -83,12 +75,10 @@ export type ClockInMaxAggregateInputType = {
   tenantId?: true
   siteId?: true
   employeeId?: true
+  qrTokenId?: true
   action?: true
   timestamp?: true
   createdAt?: true
-  token?: true
-  tokenUsedAt?: true
-  tokenExpiresAt?: true
 }
 
 export type ClockInCountAggregateInputType = {
@@ -96,12 +86,10 @@ export type ClockInCountAggregateInputType = {
   tenantId?: true
   siteId?: true
   employeeId?: true
+  qrTokenId?: true
   action?: true
   timestamp?: true
   createdAt?: true
-  token?: true
-  tokenUsedAt?: true
-  tokenExpiresAt?: true
   _all?: true
 }
 
@@ -182,12 +170,10 @@ export type ClockInGroupByOutputType = {
   tenantId: string
   siteId: string
   employeeId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp: Date
   createdAt: Date
-  token: string
-  tokenUsedAt: Date
-  tokenExpiresAt: Date
   _count: ClockInCountAggregateOutputType | null
   _min: ClockInMinAggregateOutputType | null
   _max: ClockInMaxAggregateOutputType | null
@@ -216,15 +202,14 @@ export type ClockInWhereInput = {
   tenantId?: Prisma.StringFilter<"ClockIn"> | string
   siteId?: Prisma.StringFilter<"ClockIn"> | string
   employeeId?: Prisma.StringFilter<"ClockIn"> | string
+  qrTokenId?: Prisma.StringFilter<"ClockIn"> | string
   action?: Prisma.EnumClockInActionFilter<"ClockIn"> | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
-  token?: Prisma.StringFilter<"ClockIn"> | string
-  tokenUsedAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   site?: Prisma.XOR<Prisma.SiteScalarRelationFilter, Prisma.SiteWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
+  qrToken?: Prisma.XOR<Prisma.QrTokenScalarRelationFilter, Prisma.QrTokenWhereInput>
   anomalies?: Prisma.AnomalyListRelationFilter
 }
 
@@ -233,21 +218,20 @@ export type ClockInOrderByWithRelationInput = {
   tenantId?: Prisma.SortOrder
   siteId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  qrTokenId?: Prisma.SortOrder
   action?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  token?: Prisma.SortOrder
-  tokenUsedAt?: Prisma.SortOrder
-  tokenExpiresAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   site?: Prisma.SiteOrderByWithRelationInput
   employee?: Prisma.EmployeeOrderByWithRelationInput
+  qrToken?: Prisma.QrTokenOrderByWithRelationInput
   anomalies?: Prisma.AnomalyOrderByRelationAggregateInput
 }
 
 export type ClockInWhereUniqueInput = Prisma.AtLeast<{
   id?: string
-  token?: string
+  qrTokenId?: string
   AND?: Prisma.ClockInWhereInput | Prisma.ClockInWhereInput[]
   OR?: Prisma.ClockInWhereInput[]
   NOT?: Prisma.ClockInWhereInput | Prisma.ClockInWhereInput[]
@@ -257,25 +241,22 @@ export type ClockInWhereUniqueInput = Prisma.AtLeast<{
   action?: Prisma.EnumClockInActionFilter<"ClockIn"> | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
-  tokenUsedAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   site?: Prisma.XOR<Prisma.SiteScalarRelationFilter, Prisma.SiteWhereInput>
   employee?: Prisma.XOR<Prisma.EmployeeScalarRelationFilter, Prisma.EmployeeWhereInput>
+  qrToken?: Prisma.XOR<Prisma.QrTokenScalarRelationFilter, Prisma.QrTokenWhereInput>
   anomalies?: Prisma.AnomalyListRelationFilter
-}, "id" | "token">
+}, "id" | "qrTokenId">
 
 export type ClockInOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   siteId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  qrTokenId?: Prisma.SortOrder
   action?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  token?: Prisma.SortOrder
-  tokenUsedAt?: Prisma.SortOrder
-  tokenExpiresAt?: Prisma.SortOrder
   _count?: Prisma.ClockInCountOrderByAggregateInput
   _max?: Prisma.ClockInMaxOrderByAggregateInput
   _min?: Prisma.ClockInMinOrderByAggregateInput
@@ -289,12 +270,10 @@ export type ClockInScalarWhereWithAggregatesInput = {
   tenantId?: Prisma.StringWithAggregatesFilter<"ClockIn"> | string
   siteId?: Prisma.StringWithAggregatesFilter<"ClockIn"> | string
   employeeId?: Prisma.StringWithAggregatesFilter<"ClockIn"> | string
+  qrTokenId?: Prisma.StringWithAggregatesFilter<"ClockIn"> | string
   action?: Prisma.EnumClockInActionWithAggregatesFilter<"ClockIn"> | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeWithAggregatesFilter<"ClockIn"> | Date | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ClockIn"> | Date | string
-  token?: Prisma.StringWithAggregatesFilter<"ClockIn"> | string
-  tokenUsedAt?: Prisma.DateTimeWithAggregatesFilter<"ClockIn"> | Date | string
-  tokenExpiresAt?: Prisma.DateTimeWithAggregatesFilter<"ClockIn"> | Date | string
 }
 
 export type ClockInCreateInput = {
@@ -302,12 +281,10 @@ export type ClockInCreateInput = {
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutClockInsInput
   site: Prisma.SiteCreateNestedOneWithoutClockInsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutClockInsInput
+  qrToken: Prisma.QrTokenCreateNestedOneWithoutClockInInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -316,12 +293,10 @@ export type ClockInUncheckedCreateInput = {
   tenantId: string
   siteId: string
   employeeId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -330,12 +305,10 @@ export type ClockInUpdateInput = {
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClockInsNestedInput
   site?: Prisma.SiteUpdateOneRequiredWithoutClockInsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutClockInsNestedInput
+  qrToken?: Prisma.QrTokenUpdateOneRequiredWithoutClockInNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -344,12 +317,10 @@ export type ClockInUncheckedUpdateInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   siteId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -358,12 +329,10 @@ export type ClockInCreateManyInput = {
   tenantId: string
   siteId: string
   employeeId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
 }
 
 export type ClockInUpdateManyMutationInput = {
@@ -371,9 +340,6 @@ export type ClockInUpdateManyMutationInput = {
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClockInUncheckedUpdateManyInput = {
@@ -381,12 +347,10 @@ export type ClockInUncheckedUpdateManyInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   siteId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClockInListRelationFilter = {
@@ -399,17 +363,20 @@ export type ClockInOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type ClockInNullableScalarRelationFilter = {
+  is?: Prisma.ClockInWhereInput | null
+  isNot?: Prisma.ClockInWhereInput | null
+}
+
 export type ClockInCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   tenantId?: Prisma.SortOrder
   siteId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  qrTokenId?: Prisma.SortOrder
   action?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  token?: Prisma.SortOrder
-  tokenUsedAt?: Prisma.SortOrder
-  tokenExpiresAt?: Prisma.SortOrder
 }
 
 export type ClockInMaxOrderByAggregateInput = {
@@ -417,12 +384,10 @@ export type ClockInMaxOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   siteId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  qrTokenId?: Prisma.SortOrder
   action?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  token?: Prisma.SortOrder
-  tokenUsedAt?: Prisma.SortOrder
-  tokenExpiresAt?: Prisma.SortOrder
 }
 
 export type ClockInMinOrderByAggregateInput = {
@@ -430,17 +395,10 @@ export type ClockInMinOrderByAggregateInput = {
   tenantId?: Prisma.SortOrder
   siteId?: Prisma.SortOrder
   employeeId?: Prisma.SortOrder
+  qrTokenId?: Prisma.SortOrder
   action?: Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  token?: Prisma.SortOrder
-  tokenUsedAt?: Prisma.SortOrder
-  tokenExpiresAt?: Prisma.SortOrder
-}
-
-export type ClockInNullableScalarRelationFilter = {
-  is?: Prisma.ClockInWhereInput | null
-  isNot?: Prisma.ClockInWhereInput | null
 }
 
 export type ClockInCreateNestedManyWithoutTenantInput = {
@@ -569,6 +527,38 @@ export type ClockInUncheckedUpdateManyWithoutEmployeeNestedInput = {
   deleteMany?: Prisma.ClockInScalarWhereInput | Prisma.ClockInScalarWhereInput[]
 }
 
+export type ClockInCreateNestedOneWithoutQrTokenInput = {
+  create?: Prisma.XOR<Prisma.ClockInCreateWithoutQrTokenInput, Prisma.ClockInUncheckedCreateWithoutQrTokenInput>
+  connectOrCreate?: Prisma.ClockInCreateOrConnectWithoutQrTokenInput
+  connect?: Prisma.ClockInWhereUniqueInput
+}
+
+export type ClockInUncheckedCreateNestedOneWithoutQrTokenInput = {
+  create?: Prisma.XOR<Prisma.ClockInCreateWithoutQrTokenInput, Prisma.ClockInUncheckedCreateWithoutQrTokenInput>
+  connectOrCreate?: Prisma.ClockInCreateOrConnectWithoutQrTokenInput
+  connect?: Prisma.ClockInWhereUniqueInput
+}
+
+export type ClockInUpdateOneWithoutQrTokenNestedInput = {
+  create?: Prisma.XOR<Prisma.ClockInCreateWithoutQrTokenInput, Prisma.ClockInUncheckedCreateWithoutQrTokenInput>
+  connectOrCreate?: Prisma.ClockInCreateOrConnectWithoutQrTokenInput
+  upsert?: Prisma.ClockInUpsertWithoutQrTokenInput
+  disconnect?: Prisma.ClockInWhereInput | boolean
+  delete?: Prisma.ClockInWhereInput | boolean
+  connect?: Prisma.ClockInWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClockInUpdateToOneWithWhereWithoutQrTokenInput, Prisma.ClockInUpdateWithoutQrTokenInput>, Prisma.ClockInUncheckedUpdateWithoutQrTokenInput>
+}
+
+export type ClockInUncheckedUpdateOneWithoutQrTokenNestedInput = {
+  create?: Prisma.XOR<Prisma.ClockInCreateWithoutQrTokenInput, Prisma.ClockInUncheckedCreateWithoutQrTokenInput>
+  connectOrCreate?: Prisma.ClockInCreateOrConnectWithoutQrTokenInput
+  upsert?: Prisma.ClockInUpsertWithoutQrTokenInput
+  disconnect?: Prisma.ClockInWhereInput | boolean
+  delete?: Prisma.ClockInWhereInput | boolean
+  connect?: Prisma.ClockInWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ClockInUpdateToOneWithWhereWithoutQrTokenInput, Prisma.ClockInUpdateWithoutQrTokenInput>, Prisma.ClockInUncheckedUpdateWithoutQrTokenInput>
+}
+
 export type EnumClockInActionFieldUpdateOperationsInput = {
   set?: $Enums.ClockInAction
 }
@@ -594,11 +584,9 @@ export type ClockInCreateWithoutTenantInput = {
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   site: Prisma.SiteCreateNestedOneWithoutClockInsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutClockInsInput
+  qrToken: Prisma.QrTokenCreateNestedOneWithoutClockInInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -606,12 +594,10 @@ export type ClockInUncheckedCreateWithoutTenantInput = {
   id?: string
   siteId: string
   employeeId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -649,12 +635,10 @@ export type ClockInScalarWhereInput = {
   tenantId?: Prisma.StringFilter<"ClockIn"> | string
   siteId?: Prisma.StringFilter<"ClockIn"> | string
   employeeId?: Prisma.StringFilter<"ClockIn"> | string
+  qrTokenId?: Prisma.StringFilter<"ClockIn"> | string
   action?: Prisma.EnumClockInActionFilter<"ClockIn"> | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
-  token?: Prisma.StringFilter<"ClockIn"> | string
-  tokenUsedAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFilter<"ClockIn"> | Date | string
 }
 
 export type ClockInCreateWithoutSiteInput = {
@@ -662,11 +646,9 @@ export type ClockInCreateWithoutSiteInput = {
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutClockInsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutClockInsInput
+  qrToken: Prisma.QrTokenCreateNestedOneWithoutClockInInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -674,12 +656,10 @@ export type ClockInUncheckedCreateWithoutSiteInput = {
   id?: string
   tenantId: string
   employeeId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -714,11 +694,9 @@ export type ClockInCreateWithoutEmployeeInput = {
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutClockInsInput
   site: Prisma.SiteCreateNestedOneWithoutClockInsInput
+  qrToken: Prisma.QrTokenCreateNestedOneWithoutClockInInput
   anomalies?: Prisma.AnomalyCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -726,12 +704,10 @@ export type ClockInUncheckedCreateWithoutEmployeeInput = {
   id?: string
   tenantId: string
   siteId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutRelatedClockInInput
 }
 
@@ -761,20 +737,18 @@ export type ClockInUpdateManyWithWhereWithoutEmployeeInput = {
   data: Prisma.XOR<Prisma.ClockInUpdateManyMutationInput, Prisma.ClockInUncheckedUpdateManyWithoutEmployeeInput>
 }
 
-export type ClockInCreateWithoutAnomaliesInput = {
+export type ClockInCreateWithoutQrTokenInput = {
   id?: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutClockInsInput
   site: Prisma.SiteCreateNestedOneWithoutClockInsInput
   employee: Prisma.EmployeeCreateNestedOneWithoutClockInsInput
+  anomalies?: Prisma.AnomalyCreateNestedManyWithoutRelatedClockInInput
 }
 
-export type ClockInUncheckedCreateWithoutAnomaliesInput = {
+export type ClockInUncheckedCreateWithoutQrTokenInput = {
   id?: string
   tenantId: string
   siteId: string
@@ -782,9 +756,67 @@ export type ClockInUncheckedCreateWithoutAnomaliesInput = {
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
+  anomalies?: Prisma.AnomalyUncheckedCreateNestedManyWithoutRelatedClockInInput
+}
+
+export type ClockInCreateOrConnectWithoutQrTokenInput = {
+  where: Prisma.ClockInWhereUniqueInput
+  create: Prisma.XOR<Prisma.ClockInCreateWithoutQrTokenInput, Prisma.ClockInUncheckedCreateWithoutQrTokenInput>
+}
+
+export type ClockInUpsertWithoutQrTokenInput = {
+  update: Prisma.XOR<Prisma.ClockInUpdateWithoutQrTokenInput, Prisma.ClockInUncheckedUpdateWithoutQrTokenInput>
+  create: Prisma.XOR<Prisma.ClockInCreateWithoutQrTokenInput, Prisma.ClockInUncheckedCreateWithoutQrTokenInput>
+  where?: Prisma.ClockInWhereInput
+}
+
+export type ClockInUpdateToOneWithWhereWithoutQrTokenInput = {
+  where?: Prisma.ClockInWhereInput
+  data: Prisma.XOR<Prisma.ClockInUpdateWithoutQrTokenInput, Prisma.ClockInUncheckedUpdateWithoutQrTokenInput>
+}
+
+export type ClockInUpdateWithoutQrTokenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
+  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutClockInsNestedInput
+  site?: Prisma.SiteUpdateOneRequiredWithoutClockInsNestedInput
+  employee?: Prisma.EmployeeUpdateOneRequiredWithoutClockInsNestedInput
+  anomalies?: Prisma.AnomalyUpdateManyWithoutRelatedClockInNestedInput
+}
+
+export type ClockInUncheckedUpdateWithoutQrTokenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  siteId?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
+  timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutRelatedClockInNestedInput
+}
+
+export type ClockInCreateWithoutAnomaliesInput = {
+  id?: string
+  action: $Enums.ClockInAction
+  timestamp?: Date | string
+  createdAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutClockInsInput
+  site: Prisma.SiteCreateNestedOneWithoutClockInsInput
+  employee: Prisma.EmployeeCreateNestedOneWithoutClockInsInput
+  qrToken: Prisma.QrTokenCreateNestedOneWithoutClockInInput
+}
+
+export type ClockInUncheckedCreateWithoutAnomaliesInput = {
+  id?: string
+  tenantId: string
+  siteId: string
+  employeeId: string
+  qrTokenId: string
+  action: $Enums.ClockInAction
+  timestamp?: Date | string
+  createdAt?: Date | string
 }
 
 export type ClockInCreateOrConnectWithoutAnomaliesInput = {
@@ -808,12 +840,10 @@ export type ClockInUpdateWithoutAnomaliesInput = {
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClockInsNestedInput
   site?: Prisma.SiteUpdateOneRequiredWithoutClockInsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutClockInsNestedInput
+  qrToken?: Prisma.QrTokenUpdateOneRequiredWithoutClockInNestedInput
 }
 
 export type ClockInUncheckedUpdateWithoutAnomaliesInput = {
@@ -821,24 +851,20 @@ export type ClockInUncheckedUpdateWithoutAnomaliesInput = {
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   siteId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClockInCreateManyTenantInput = {
   id?: string
   siteId: string
   employeeId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
 }
 
 export type ClockInUpdateWithoutTenantInput = {
@@ -846,11 +872,9 @@ export type ClockInUpdateWithoutTenantInput = {
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   site?: Prisma.SiteUpdateOneRequiredWithoutClockInsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutClockInsNestedInput
+  qrToken?: Prisma.QrTokenUpdateOneRequiredWithoutClockInNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -858,12 +882,10 @@ export type ClockInUncheckedUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   siteId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -871,24 +893,20 @@ export type ClockInUncheckedUpdateManyWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   siteId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClockInCreateManySiteInput = {
   id?: string
   tenantId: string
   employeeId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
 }
 
 export type ClockInUpdateWithoutSiteInput = {
@@ -896,11 +914,9 @@ export type ClockInUpdateWithoutSiteInput = {
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClockInsNestedInput
   employee?: Prisma.EmployeeUpdateOneRequiredWithoutClockInsNestedInput
+  qrToken?: Prisma.QrTokenUpdateOneRequiredWithoutClockInNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -908,12 +924,10 @@ export type ClockInUncheckedUpdateWithoutSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -921,24 +935,20 @@ export type ClockInUncheckedUpdateManyWithoutSiteInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   employeeId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type ClockInCreateManyEmployeeInput = {
   id?: string
   tenantId: string
   siteId: string
+  qrTokenId: string
   action: $Enums.ClockInAction
   timestamp?: Date | string
   createdAt?: Date | string
-  token: string
-  tokenUsedAt?: Date | string
-  tokenExpiresAt: Date | string
 }
 
 export type ClockInUpdateWithoutEmployeeInput = {
@@ -946,11 +956,9 @@ export type ClockInUpdateWithoutEmployeeInput = {
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutClockInsNestedInput
   site?: Prisma.SiteUpdateOneRequiredWithoutClockInsNestedInput
+  qrToken?: Prisma.QrTokenUpdateOneRequiredWithoutClockInNestedInput
   anomalies?: Prisma.AnomalyUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -958,12 +966,10 @@ export type ClockInUncheckedUpdateWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   siteId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   anomalies?: Prisma.AnomalyUncheckedUpdateManyWithoutRelatedClockInNestedInput
 }
 
@@ -971,12 +977,10 @@ export type ClockInUncheckedUpdateManyWithoutEmployeeInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   siteId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrTokenId?: Prisma.StringFieldUpdateOperationsInput | string
   action?: Prisma.EnumClockInActionFieldUpdateOperationsInput | $Enums.ClockInAction
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  token?: Prisma.StringFieldUpdateOperationsInput | string
-  tokenUsedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tokenExpiresAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1015,15 +1019,14 @@ export type ClockInSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   tenantId?: boolean
   siteId?: boolean
   employeeId?: boolean
+  qrTokenId?: boolean
   action?: boolean
   timestamp?: boolean
   createdAt?: boolean
-  token?: boolean
-  tokenUsedAt?: boolean
-  tokenExpiresAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   site?: boolean | Prisma.SiteDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  qrToken?: boolean | Prisma.QrTokenDefaultArgs<ExtArgs>
   anomalies?: boolean | Prisma.ClockIn$anomaliesArgs<ExtArgs>
   _count?: boolean | Prisma.ClockInCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["clockIn"]>
@@ -1033,15 +1036,14 @@ export type ClockInSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tenantId?: boolean
   siteId?: boolean
   employeeId?: boolean
+  qrTokenId?: boolean
   action?: boolean
   timestamp?: boolean
   createdAt?: boolean
-  token?: boolean
-  tokenUsedAt?: boolean
-  tokenExpiresAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   site?: boolean | Prisma.SiteDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  qrToken?: boolean | Prisma.QrTokenDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["clockIn"]>
 
 export type ClockInSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1049,15 +1051,14 @@ export type ClockInSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   tenantId?: boolean
   siteId?: boolean
   employeeId?: boolean
+  qrTokenId?: boolean
   action?: boolean
   timestamp?: boolean
   createdAt?: boolean
-  token?: boolean
-  tokenUsedAt?: boolean
-  tokenExpiresAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   site?: boolean | Prisma.SiteDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  qrToken?: boolean | Prisma.QrTokenDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["clockIn"]>
 
 export type ClockInSelectScalar = {
@@ -1065,19 +1066,18 @@ export type ClockInSelectScalar = {
   tenantId?: boolean
   siteId?: boolean
   employeeId?: boolean
+  qrTokenId?: boolean
   action?: boolean
   timestamp?: boolean
   createdAt?: boolean
-  token?: boolean
-  tokenUsedAt?: boolean
-  tokenExpiresAt?: boolean
 }
 
-export type ClockInOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "siteId" | "employeeId" | "action" | "timestamp" | "createdAt" | "token" | "tokenUsedAt" | "tokenExpiresAt", ExtArgs["result"]["clockIn"]>
+export type ClockInOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "siteId" | "employeeId" | "qrTokenId" | "action" | "timestamp" | "createdAt", ExtArgs["result"]["clockIn"]>
 export type ClockInInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   site?: boolean | Prisma.SiteDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  qrToken?: boolean | Prisma.QrTokenDefaultArgs<ExtArgs>
   anomalies?: boolean | Prisma.ClockIn$anomaliesArgs<ExtArgs>
   _count?: boolean | Prisma.ClockInCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -1085,11 +1085,13 @@ export type ClockInIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   site?: boolean | Prisma.SiteDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  qrToken?: boolean | Prisma.QrTokenDefaultArgs<ExtArgs>
 }
 export type ClockInIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   site?: boolean | Prisma.SiteDefaultArgs<ExtArgs>
   employee?: boolean | Prisma.EmployeeDefaultArgs<ExtArgs>
+  qrToken?: boolean | Prisma.QrTokenDefaultArgs<ExtArgs>
 }
 
 export type $ClockInPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1098,6 +1100,7 @@ export type $ClockInPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     tenant: Prisma.$TenantPayload<ExtArgs>
     site: Prisma.$SitePayload<ExtArgs>
     employee: Prisma.$EmployeePayload<ExtArgs>
+    qrToken: Prisma.$QrTokenPayload<ExtArgs>
     anomalies: Prisma.$AnomalyPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1105,12 +1108,10 @@ export type $ClockInPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     tenantId: string
     siteId: string
     employeeId: string
+    qrTokenId: string
     action: $Enums.ClockInAction
     timestamp: Date
     createdAt: Date
-    token: string
-    tokenUsedAt: Date
-    tokenExpiresAt: Date
   }, ExtArgs["result"]["clockIn"]>
   composites: {}
 }
@@ -1508,6 +1509,7 @@ export interface Prisma__ClockInClient<T, Null = never, ExtArgs extends runtime.
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   site<T extends Prisma.SiteDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SiteDefaultArgs<ExtArgs>>): Prisma.Prisma__SiteClient<runtime.Types.Result.GetResult<Prisma.$SitePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   employee<T extends Prisma.EmployeeDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployeeDefaultArgs<ExtArgs>>): Prisma.Prisma__EmployeeClient<runtime.Types.Result.GetResult<Prisma.$EmployeePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  qrToken<T extends Prisma.QrTokenDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.QrTokenDefaultArgs<ExtArgs>>): Prisma.Prisma__QrTokenClient<runtime.Types.Result.GetResult<Prisma.$QrTokenPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   anomalies<T extends Prisma.ClockIn$anomaliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClockIn$anomaliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnomalyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1542,12 +1544,10 @@ export interface ClockInFieldRefs {
   readonly tenantId: Prisma.FieldRef<"ClockIn", 'String'>
   readonly siteId: Prisma.FieldRef<"ClockIn", 'String'>
   readonly employeeId: Prisma.FieldRef<"ClockIn", 'String'>
+  readonly qrTokenId: Prisma.FieldRef<"ClockIn", 'String'>
   readonly action: Prisma.FieldRef<"ClockIn", 'ClockInAction'>
   readonly timestamp: Prisma.FieldRef<"ClockIn", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"ClockIn", 'DateTime'>
-  readonly token: Prisma.FieldRef<"ClockIn", 'String'>
-  readonly tokenUsedAt: Prisma.FieldRef<"ClockIn", 'DateTime'>
-  readonly tokenExpiresAt: Prisma.FieldRef<"ClockIn", 'DateTime'>
 }
     
 

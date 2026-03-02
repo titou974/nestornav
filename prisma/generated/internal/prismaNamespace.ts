@@ -387,6 +387,7 @@ export const ModelName = {
   Tenant: 'Tenant',
   Site: 'Site',
   Employee: 'Employee',
+  QrToken: 'QrToken',
   ClockIn: 'ClockIn',
   Anomaly: 'Anomaly',
   User: 'User',
@@ -408,7 +409,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "site" | "employee" | "clockIn" | "anomaly" | "user" | "account" | "session" | "verificationToken"
+    modelProps: "tenant" | "site" | "employee" | "qrToken" | "clockIn" | "anomaly" | "user" | "account" | "session" | "verificationToken"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -631,6 +632,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.EmployeeCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.EmployeeCountAggregateOutputType> | number
+        }
+      }
+    }
+    QrToken: {
+      payload: Prisma.$QrTokenPayload<ExtArgs>
+      fields: Prisma.QrTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.QrTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.QrTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.QrTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.QrTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>
+        }
+        findMany: {
+          args: Prisma.QrTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>[]
+        }
+        create: {
+          args: Prisma.QrTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>
+        }
+        createMany: {
+          args: Prisma.QrTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.QrTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.QrTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>
+        }
+        update: {
+          args: Prisma.QrTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.QrTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.QrTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.QrTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.QrTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$QrTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.QrTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateQrToken>
+        }
+        groupBy: {
+          args: Prisma.QrTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QrTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.QrTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.QrTokenCountAggregateOutputType> | number
         }
       }
     }
@@ -1158,17 +1233,29 @@ export const EmployeeScalarFieldEnum = {
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
 
 
+export const QrTokenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  siteId: 'siteId',
+  token: 'token',
+  consumed: 'consumed',
+  consumedAt: 'consumedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type QrTokenScalarFieldEnum = (typeof QrTokenScalarFieldEnum)[keyof typeof QrTokenScalarFieldEnum]
+
+
 export const ClockInScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   siteId: 'siteId',
   employeeId: 'employeeId',
+  qrTokenId: 'qrTokenId',
   action: 'action',
   timestamp: 'timestamp',
-  createdAt: 'createdAt',
-  token: 'token',
-  tokenUsedAt: 'tokenUsedAt',
-  tokenExpiresAt: 'tokenExpiresAt'
+  createdAt: 'createdAt'
 } as const
 
 export type ClockInScalarFieldEnum = (typeof ClockInScalarFieldEnum)[keyof typeof ClockInScalarFieldEnum]
@@ -1473,6 +1560,7 @@ export type GlobalOmitConfig = {
   tenant?: Prisma.TenantOmit
   site?: Prisma.SiteOmit
   employee?: Prisma.EmployeeOmit
+  qrToken?: Prisma.QrTokenOmit
   clockIn?: Prisma.ClockInOmit
   anomaly?: Prisma.AnomalyOmit
   user?: Prisma.UserOmit

@@ -6,57 +6,59 @@ import { z } from "zod";
 import { cookies } from "next/headers";
 
 /**
- * Valider un token QR et récupérer les informations du site et des employés
- * Le token est maintenant encodé avec les infos du site: siteId:tenantId:randomToken
+ * Valider un token QR
  */
-export async function validateTokenAction(encodedToken: string) {
+export async function validateTokenAction(token: string) {
   try {
-    // Décoder le token pour extraire siteId, tenantId et token
-    let siteId: string;
-    let tenantId: string;
-    let token: string;
-
-    try {
-      const decoded = Buffer.from(encodedToken, "base64url").toString("utf-8");
-      const parts = decoded.split(":");
-
-      if (parts.length !== 3) {
-        return { success: false, error: "Format de token invalide" };
-      }
-
-      [siteId, tenantId, token] = parts;
-    } catch (decodeError) {
-      return { success: false, error: "Token invalide" };
-    }
-
-    // Vérifier que le site existe et appartient au tenant
-    const site = await prisma.site.findFirst({
-      where: { id: siteId, tenantId },
+    // Vérifier que le token existe et n'est pas consommé
+    const qrToken = await prisma.qrToken.findUnique({
+      where: { token },
+      include: { site: true },
     });
 
-    if (!site) {
-      return { success: false, error: "Site non trouvé ou token invalide" };
+    if (!qrToken) {
+      return {
+        success: false,
+        error: "Token invalide",
+      };
+    }
+
+    if (qrToken.consumed) {
+      return {
+        success: false,
+        error: "Token déjà utilisé",
+      };
+    }
+
+    if (new Date() > qrToken.expiresAt) {
+      return {
+        success: false,
+        error: "Token expiré",
+      };
     }
 
     // Récupérer les employés du tenant
     const employees = await prisma.employee.findMany({
-      where: { tenantId, isActive: true },
+      where: { tenantId: qrToken.tenantId, isActive: true },
       orderBy: { firstName: "asc" },
     });
 
     return {
       success: true,
       data: {
-        siteId,
-        siteName: site.name,
-        tenantId,
+        qrTokenId: qrToken.id,
+        siteId: qrToken.siteId,
+        siteName: qrToken.site.name,
+        tenantId: qrToken.tenantId,
         employees,
-        token: encodedToken, // Passer le token encodé pour la création du ClockIn
       },
     };
   } catch (error) {
-    console.error("Erreur validation token:", error);
-    return { success: false, error: "Erreur lors de la validation du token" };
+    console.error("Error validating token:", error);
+    return {
+      success: false,
+      error: "Erreur lors de la validation du token",
+    };
   }
 }
 
@@ -157,14 +159,14 @@ export async function getEmployeeCookieAction() {
 }
 
 /**
- * Créer un pointage avec token intégré
+ * Créer un pointage et marquer le token comme consommé
  */
 export async function createClockInAction(data: {
   siteId: string;
   employeeId: string;
   action: "START" | "PAUSE" | "END";
   tenantId: string;
-  token: string;
+  qrTokenId: string;
 }) {
   try {
     const validated = createClockInSchema.parse({
@@ -173,28 +175,64 @@ export async function createClockInAction(data: {
       action: data.action,
     });
 
-    // Utiliser directement le token reçu (pas de génération d'un nouveau)
-    // Cela permet de vérifier l'unicité et empêcher la réutilisation
-    const clockIn = await prisma.clockIn.create({
-      data: {
-        ...validated,
-        tenantId: data.tenantId,
-        token: data.token, // Utiliser le token encodé reçu
-        tokenUsedAt: new Date(),
-        tokenExpiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 an
-      },
-      include: {
-        employee: true,
-        site: true,
-      },
+    // Créer le pointage et marquer le token comme consommé dans une transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Vérifier que le token n'est pas déjà consommé
+      const qrToken = await tx.qrToken.findUnique({
+        where: { id: data.qrTokenId },
+      });
+
+      if (!qrToken) {
+        throw new Error("Token non trouvé");
+      }
+
+      if (qrToken.consumed) {
+        throw new Error("Token déjà utilisé");
+      }
+
+      // Créer le pointage
+      const clockIn = await tx.clockIn.create({
+        data: {
+          ...validated,
+          tenantId: data.tenantId,
+          qrTokenId: data.qrTokenId,
+        },
+        include: {
+          employee: true,
+          site: true,
+        },
+      });
+
+      // Marquer le token comme consommé
+      await tx.qrToken.update({
+        where: { id: data.qrTokenId },
+        data: {
+          consumed: true,
+          consumedAt: new Date(),
+        },
+      });
+
+      return clockIn;
     });
 
-    return { success: true, data: clockIn };
+    return { success: true, data: result };
   } catch (error) {
+    console.error("Error creating clock-in:", error);
     if (error instanceof z.ZodError) {
-      return { success: false, error: error.issues[0].message };
+      return {
+        success: false,
+        error: error.issues[0].message,
+      };
     }
-    console.error("Erreur création pointage:", error);
-    return { success: false, error: "Erreur lors de la création du pointage" };
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+    return {
+      success: false,
+      error: "Erreur lors de la création du pointage",
+    };
   }
 }

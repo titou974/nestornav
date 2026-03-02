@@ -31,6 +31,7 @@ model Tenant {
   sites     Site[]
   employees Employee[]
   clockIns  ClockIn[]
+  qrTokens  QrToken[]
   anomalies Anomaly[]
   users     User[]
 
@@ -50,6 +51,7 @@ model Site {
   // Relations
   tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   clockIns ClockIn[]
+  qrTokens QrToken[]
 
   @@index([tenantId])
   @@map("sites")
@@ -75,29 +77,46 @@ model Employee {
   @@map("employees")
 }
 
-/// ClockIn (Pointage) - Time tracking event with QR token info
+/// QrToken - QR code token for site access
+model QrToken {
+  id        String    @id @default(cuid())
+  tenantId  String
+  siteId    String
+  token     String    @unique
+  consumed  Boolean   @default(false)
+  consumedAt DateTime?
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+
+  // Relations
+  tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  site     Site      @relation(fields: [siteId], references: [id], onDelete: Cascade)
+  clockIn  ClockIn?  // Relation optionnelle vers le ClockIn qui a consommé ce token
+
+  @@index([token, consumed, expiresAt])
+  @@map("qr_tokens")
+}
+
+/// ClockIn (Pointage) - Time tracking event
 model ClockIn {
   id         String        @id @default(cuid())
   tenantId   String
   siteId     String
   employeeId String
+  qrTokenId  String        @unique // Relation vers le QrToken utilisé
   action     ClockInAction
   timestamp  DateTime      @default(now())
   createdAt  DateTime      @default(now())
-  
-  // QR Token fields (fusionné depuis QrToken)
-  token      String        @unique
-  tokenUsedAt DateTime     @default(now())
-  tokenExpiresAt DateTime
 
   // Relations
   tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   site     Site     @relation(fields: [siteId], references: [id], onDelete: Cascade)
   employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  qrToken  QrToken  @relation(fields: [qrTokenId], references: [id], onDelete: Cascade)
   anomalies Anomaly[]
 
   @@index([tenantId, siteId, employeeId, timestamp])
-  @@index([token, tokenExpiresAt])
+  @@index([qrTokenId])
   @@map("clock_ins")
 }
 

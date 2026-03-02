@@ -200,6 +200,7 @@ export type SiteWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Site"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   clockIns?: Prisma.ClockInListRelationFilter
+  qrTokens?: Prisma.QrTokenListRelationFilter
 }
 
 export type SiteOrderByWithRelationInput = {
@@ -212,6 +213,7 @@ export type SiteOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   clockIns?: Prisma.ClockInOrderByRelationAggregateInput
+  qrTokens?: Prisma.QrTokenOrderByRelationAggregateInput
 }
 
 export type SiteWhereUniqueInput = Prisma.AtLeast<{
@@ -227,6 +229,7 @@ export type SiteWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Site"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   clockIns?: Prisma.ClockInListRelationFilter
+  qrTokens?: Prisma.QrTokenListRelationFilter
 }, "id">
 
 export type SiteOrderByWithAggregationInput = {
@@ -264,6 +267,7 @@ export type SiteCreateInput = {
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSitesInput
   clockIns?: Prisma.ClockInCreateNestedManyWithoutSiteInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutSiteInput
 }
 
 export type SiteUncheckedCreateInput = {
@@ -275,6 +279,7 @@ export type SiteUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutSiteInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutSiteInput
 }
 
 export type SiteUpdateInput = {
@@ -286,6 +291,7 @@ export type SiteUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSitesNestedInput
   clockIns?: Prisma.ClockInUpdateManyWithoutSiteNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutSiteNestedInput
 }
 
 export type SiteUncheckedUpdateInput = {
@@ -297,6 +303,7 @@ export type SiteUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutSiteNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutSiteNestedInput
 }
 
 export type SiteCreateManyInput = {
@@ -419,6 +426,20 @@ export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
 
+export type SiteCreateNestedOneWithoutQrTokensInput = {
+  create?: Prisma.XOR<Prisma.SiteCreateWithoutQrTokensInput, Prisma.SiteUncheckedCreateWithoutQrTokensInput>
+  connectOrCreate?: Prisma.SiteCreateOrConnectWithoutQrTokensInput
+  connect?: Prisma.SiteWhereUniqueInput
+}
+
+export type SiteUpdateOneRequiredWithoutQrTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.SiteCreateWithoutQrTokensInput, Prisma.SiteUncheckedCreateWithoutQrTokensInput>
+  connectOrCreate?: Prisma.SiteCreateOrConnectWithoutQrTokensInput
+  upsert?: Prisma.SiteUpsertWithoutQrTokensInput
+  connect?: Prisma.SiteWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SiteUpdateToOneWithWhereWithoutQrTokensInput, Prisma.SiteUpdateWithoutQrTokensInput>, Prisma.SiteUncheckedUpdateWithoutQrTokensInput>
+}
+
 export type SiteCreateNestedOneWithoutClockInsInput = {
   create?: Prisma.XOR<Prisma.SiteCreateWithoutClockInsInput, Prisma.SiteUncheckedCreateWithoutClockInsInput>
   connectOrCreate?: Prisma.SiteCreateOrConnectWithoutClockInsInput
@@ -441,6 +462,7 @@ export type SiteCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   clockIns?: Prisma.ClockInCreateNestedManyWithoutSiteInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutSiteInput
 }
 
 export type SiteUncheckedCreateWithoutTenantInput = {
@@ -451,6 +473,7 @@ export type SiteUncheckedCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutSiteInput
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutSiteInput
 }
 
 export type SiteCreateOrConnectWithoutTenantInput = {
@@ -492,6 +515,66 @@ export type SiteScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Site"> | Date | string
 }
 
+export type SiteCreateWithoutQrTokensInput = {
+  id?: string
+  name: string
+  address?: string | null
+  qrCodeUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutSitesInput
+  clockIns?: Prisma.ClockInCreateNestedManyWithoutSiteInput
+}
+
+export type SiteUncheckedCreateWithoutQrTokensInput = {
+  id?: string
+  tenantId: string
+  name: string
+  address?: string | null
+  qrCodeUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  clockIns?: Prisma.ClockInUncheckedCreateNestedManyWithoutSiteInput
+}
+
+export type SiteCreateOrConnectWithoutQrTokensInput = {
+  where: Prisma.SiteWhereUniqueInput
+  create: Prisma.XOR<Prisma.SiteCreateWithoutQrTokensInput, Prisma.SiteUncheckedCreateWithoutQrTokensInput>
+}
+
+export type SiteUpsertWithoutQrTokensInput = {
+  update: Prisma.XOR<Prisma.SiteUpdateWithoutQrTokensInput, Prisma.SiteUncheckedUpdateWithoutQrTokensInput>
+  create: Prisma.XOR<Prisma.SiteCreateWithoutQrTokensInput, Prisma.SiteUncheckedCreateWithoutQrTokensInput>
+  where?: Prisma.SiteWhereInput
+}
+
+export type SiteUpdateToOneWithWhereWithoutQrTokensInput = {
+  where?: Prisma.SiteWhereInput
+  data: Prisma.XOR<Prisma.SiteUpdateWithoutQrTokensInput, Prisma.SiteUncheckedUpdateWithoutQrTokensInput>
+}
+
+export type SiteUpdateWithoutQrTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCodeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutSitesNestedInput
+  clockIns?: Prisma.ClockInUpdateManyWithoutSiteNestedInput
+}
+
+export type SiteUncheckedUpdateWithoutQrTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCodeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutSiteNestedInput
+}
+
 export type SiteCreateWithoutClockInsInput = {
   id?: string
   name: string
@@ -500,6 +583,7 @@ export type SiteCreateWithoutClockInsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   tenant: Prisma.TenantCreateNestedOneWithoutSitesInput
+  qrTokens?: Prisma.QrTokenCreateNestedManyWithoutSiteInput
 }
 
 export type SiteUncheckedCreateWithoutClockInsInput = {
@@ -510,6 +594,7 @@ export type SiteUncheckedCreateWithoutClockInsInput = {
   qrCodeUrl?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  qrTokens?: Prisma.QrTokenUncheckedCreateNestedManyWithoutSiteInput
 }
 
 export type SiteCreateOrConnectWithoutClockInsInput = {
@@ -536,6 +621,7 @@ export type SiteUpdateWithoutClockInsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   tenant?: Prisma.TenantUpdateOneRequiredWithoutSitesNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutSiteNestedInput
 }
 
 export type SiteUncheckedUpdateWithoutClockInsInput = {
@@ -546,6 +632,7 @@ export type SiteUncheckedUpdateWithoutClockInsInput = {
   qrCodeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutSiteNestedInput
 }
 
 export type SiteCreateManyTenantInput = {
@@ -565,6 +652,7 @@ export type SiteUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clockIns?: Prisma.ClockInUpdateManyWithoutSiteNestedInput
+  qrTokens?: Prisma.QrTokenUpdateManyWithoutSiteNestedInput
 }
 
 export type SiteUncheckedUpdateWithoutTenantInput = {
@@ -575,6 +663,7 @@ export type SiteUncheckedUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clockIns?: Prisma.ClockInUncheckedUpdateManyWithoutSiteNestedInput
+  qrTokens?: Prisma.QrTokenUncheckedUpdateManyWithoutSiteNestedInput
 }
 
 export type SiteUncheckedUpdateManyWithoutTenantInput = {
@@ -593,10 +682,12 @@ export type SiteUncheckedUpdateManyWithoutTenantInput = {
 
 export type SiteCountOutputType = {
   clockIns: number
+  qrTokens: number
 }
 
 export type SiteCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   clockIns?: boolean | SiteCountOutputTypeCountClockInsArgs
+  qrTokens?: boolean | SiteCountOutputTypeCountQrTokensArgs
 }
 
 /**
@@ -616,6 +707,13 @@ export type SiteCountOutputTypeCountClockInsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.ClockInWhereInput
 }
 
+/**
+ * SiteCountOutputType without action
+ */
+export type SiteCountOutputTypeCountQrTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QrTokenWhereInput
+}
+
 
 export type SiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -627,6 +725,7 @@ export type SiteSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   clockIns?: boolean | Prisma.Site$clockInsArgs<ExtArgs>
+  qrTokens?: boolean | Prisma.Site$qrTokensArgs<ExtArgs>
   _count?: boolean | Prisma.SiteCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["site"]>
 
@@ -666,6 +765,7 @@ export type SiteOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = run
 export type SiteInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   clockIns?: boolean | Prisma.Site$clockInsArgs<ExtArgs>
+  qrTokens?: boolean | Prisma.Site$qrTokensArgs<ExtArgs>
   _count?: boolean | Prisma.SiteCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SiteIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -680,6 +780,7 @@ export type $SitePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
     clockIns: Prisma.$ClockInPayload<ExtArgs>[]
+    qrTokens: Prisma.$QrTokenPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1085,6 +1186,7 @@ export interface Prisma__SiteClient<T, Null = never, ExtArgs extends runtime.Typ
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   clockIns<T extends Prisma.Site$clockInsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Site$clockInsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClockInPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  qrTokens<T extends Prisma.Site$qrTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Site$qrTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QrTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1538,6 +1640,30 @@ export type Site$clockInsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.ClockInScalarFieldEnum | Prisma.ClockInScalarFieldEnum[]
+}
+
+/**
+ * Site.qrTokens
+ */
+export type Site$qrTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the QrToken
+   */
+  select?: Prisma.QrTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the QrToken
+   */
+  omit?: Prisma.QrTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QrTokenInclude<ExtArgs> | null
+  where?: Prisma.QrTokenWhereInput
+  orderBy?: Prisma.QrTokenOrderByWithRelationInput | Prisma.QrTokenOrderByWithRelationInput[]
+  cursor?: Prisma.QrTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QrTokenScalarFieldEnum | Prisma.QrTokenScalarFieldEnum[]
 }
 
 /**

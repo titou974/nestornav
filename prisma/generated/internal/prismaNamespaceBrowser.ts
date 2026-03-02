@@ -54,6 +54,7 @@ export const ModelName = {
   Tenant: 'Tenant',
   Site: 'Site',
   Employee: 'Employee',
+  QrToken: 'QrToken',
   ClockIn: 'ClockIn',
   Anomaly: 'Anomaly',
   User: 'User',
@@ -119,17 +120,29 @@ export const EmployeeScalarFieldEnum = {
 export type EmployeeScalarFieldEnum = (typeof EmployeeScalarFieldEnum)[keyof typeof EmployeeScalarFieldEnum]
 
 
+export const QrTokenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  siteId: 'siteId',
+  token: 'token',
+  consumed: 'consumed',
+  consumedAt: 'consumedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type QrTokenScalarFieldEnum = (typeof QrTokenScalarFieldEnum)[keyof typeof QrTokenScalarFieldEnum]
+
+
 export const ClockInScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   siteId: 'siteId',
   employeeId: 'employeeId',
+  qrTokenId: 'qrTokenId',
   action: 'action',
   timestamp: 'timestamp',
-  createdAt: 'createdAt',
-  token: 'token',
-  tokenUsedAt: 'tokenUsedAt',
-  tokenExpiresAt: 'tokenExpiresAt'
+  createdAt: 'createdAt'
 } as const
 
 export type ClockInScalarFieldEnum = (typeof ClockInScalarFieldEnum)[keyof typeof ClockInScalarFieldEnum]

@@ -9,10 +9,10 @@ interface PointagePageProps {
 }
 
 interface TokenData {
+  qrTokenId: string;
   siteId: string;
   siteName: string;
   tenantId: string;
-  token: string;
   employees: Employee[];
 }
 
@@ -30,7 +30,8 @@ export default async function PointagePage({
             <Alert.Content>
               <Alert.Title>Token manquant</Alert.Title>
               <Alert.Description>
-                Veuillez scanner un QR code valide pour accéder au pointage.
+                Aucun token QR n&apos;a été fourni. Veuillez scanner un QR code
+                valide.
               </Alert.Description>
             </Alert.Content>
           </Alert>
@@ -39,68 +40,32 @@ export default async function PointagePage({
     );
   }
 
-  // Décoder le token pour extraire siteId et tenantId
-  let siteId: string;
-  let tenantId: string;
-
-  try {
-    const decoded = Buffer.from(token, "base64url").toString("utf-8");
-    const parts = decoded.split(":");
-
-    if (parts.length !== 3) {
-      throw new Error("Format de token invalide");
-    }
-
-    [siteId, tenantId] = parts;
-  } catch (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-        <div className="w-full max-w-md">
-          <Alert status="danger">
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Title>Token invalide</Alert.Title>
-              <Alert.Description>
-                Le format du token est invalide. Veuillez scanner un nouveau QR
-                code.
-              </Alert.Description>
-            </Alert.Content>
-          </Alert>
-        </div>
-      </div>
-    );
-  }
-
-  // Vérifier que le site existe
-  const site = await prisma.site.findFirst({
-    where: { id: siteId, tenantId },
-  });
-
-  if (!site) {
-    return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-        <div className="w-full max-w-md">
-          <Alert status="danger">
-            <Alert.Indicator />
-            <Alert.Content>
-              <Alert.Title>Token invalide</Alert.Title>
-              <Alert.Description>
-                Ce QR code n&apos;est pas valide. Veuillez scanner un nouveau
-                code.
-              </Alert.Description>
-            </Alert.Content>
-          </Alert>
-        </div>
-      </div>
-    );
-  }
-
-  // Vérifier si ce token a déjà été utilisé (existe dans un ClockIn)
-  const existingClockIn = await prisma.clockIn.findUnique({
+  // Vérifier que le token existe en base de données
+  const qrToken = await prisma.qrToken.findUnique({
     where: { token },
+    include: { site: true },
   });
 
-  if (existingClockIn) {
+  if (!qrToken) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+        <div className="w-full max-w-md">
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>Token invalide</Alert.Title>
+              <Alert.Description>
+                Veuillez scanner un nouveau QR code.
+              </Alert.Description>
+            </Alert.Content>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
+
+  // Vérifier si le token a déjà été consommé
+  if (qrToken.consumed) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <div className="w-full max-w-md space-y-4">
@@ -120,17 +85,37 @@ export default async function PointagePage({
     );
   }
 
+  // Vérifier si le token a expiré
+  if (new Date() > qrToken.expiresAt) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+        <div className="w-full max-w-md space-y-4">
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>Token expiré</Alert.Title>
+              <Alert.Description>
+                Ce QR code a expiré. Veuillez en générer un nouveau.
+              </Alert.Description>
+            </Alert.Content>
+          </Alert>
+          <QrCodeAnimation />
+        </div>
+      </div>
+    );
+  }
+
   // Récupérer les employés du tenant
   const employees = await prisma.employee.findMany({
-    where: { tenantId, isActive: true },
+    where: { tenantId: qrToken.tenantId, isActive: true },
     orderBy: { firstName: "asc" },
   });
 
   const tokenData: TokenData = {
-    siteId,
-    siteName: site.name,
-    tenantId,
-    token, // Passer le token encodé
+    qrTokenId: qrToken.id,
+    siteId: qrToken.siteId,
+    siteName: qrToken.site.name,
+    tenantId: qrToken.tenantId,
     employees,
   };
 

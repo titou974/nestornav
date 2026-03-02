@@ -27,26 +27,36 @@ export async function POST(request: NextRequest) {
     // Générer un token unique
     const token = generateToken();
 
-    // Calculer la date d'expiration
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + expiresInHours);
 
-    // Note: Le token n'est plus stocké dans une table séparée
-    // Il sera créé dans ClockIn lors du premier pointage
-    // On encode les infos du site dans le token pour validation ultérieure
-    const tokenData = `${siteId}:${tenantId}:${token}`;
-    const encodedToken = Buffer.from(tokenData).toString("base64url");
+    // Créer le QrToken en base de données
+    const qrToken = await prisma.qrToken.create({
+      data: {
+        token,
+        siteId,
+        tenantId: site.tenantId,
+        expiresAt,
+      },
+    });
 
-    // Générer l'URL avec le token encodé
+    // Créer l'URL de pointage avec le token
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-    const pointageUrl = `${baseUrl}/check?token=${encodedToken}`;
+    const pointageUrl = `${baseUrl}/check?token=${token}`;
 
     // Générer le QR code
-    const qrCodeDataURL = await generateQRCode(pointageUrl);
+    const qrCodeDataURL = await QRCode.toDataURL(pointageUrl, {
+      width: 300,
+      margin: 2,
+      color: {
+        dark: "#000000",
+        light: "#FFFFFF",
+      },
+    });
 
     return successResponse(
       {
-        token: encodedToken,
+        token: qrToken.token,
         qrCodeDataURL,
         pointageUrl,
         expiresAt,

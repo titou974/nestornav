@@ -49,30 +49,25 @@ export interface Employee {
   updatedAt: Date;
 }
 
-export interface ClockIn {
-  id: string;
-  tenantId: string;
-  siteId: string;
-  employeeId: string;
-  action: ClockInAction;
-  timestamp: Date;
-  createdAt: Date;
-  // QR Token fields (fusionné depuis QrToken)
-  token: string;
-  tokenUsedAt: Date;
-  tokenExpiresAt: Date;
-}
-
-// QrToken a été fusionné dans ClockIn - conservé pour compatibilité temporaire
-// @deprecated Utiliser ClockIn à la place
 export interface QrToken {
   id: string;
   tenantId: string;
   siteId: string;
   token: string;
-  used: boolean;
-  usedAt: Date | null;
+  consumed: boolean;
+  consumedAt: Date | null;
   expiresAt: Date;
+  createdAt: Date;
+}
+
+export interface ClockIn {
+  id: string;
+  tenantId: string;
+  siteId: string;
+  employeeId: string;
+  qrTokenId: string;
+  action: ClockInAction;
+  timestamp: Date;
   createdAt: Date;
 }
 
