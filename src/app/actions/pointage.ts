@@ -173,14 +173,13 @@ export async function createClockInAction(data: {
       action: data.action,
     });
 
-    // Générer un token unique pour ce pointage
-    const uniqueToken = `${data.token}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-
+    // Utiliser directement le token reçu (pas de génération d'un nouveau)
+    // Cela permet de vérifier l'unicité et empêcher la réutilisation
     const clockIn = await prisma.clockIn.create({
       data: {
         ...validated,
         tenantId: data.tenantId,
-        token: uniqueToken,
+        token: data.token, // Utiliser le token encodé reçu
         tokenUsedAt: new Date(),
         tokenExpiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 an
       },
