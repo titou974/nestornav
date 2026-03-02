@@ -109,8 +109,8 @@ export default async function PointagePage({
             <Alert.Content>
               <Alert.Title>Token déjà utilisé</Alert.Title>
               <Alert.Description>
-                Ce QR code a déjà été utilisé pour un pointage. Veuillez
-                rescanner le QR code pour effectuer une nouvelle action.
+                Veuillez rescanner le QR code pour effectuer une nouvelle
+                action.
               </Alert.Description>
             </Alert.Content>
           </Alert>

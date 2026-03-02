@@ -69,8 +69,7 @@ export function PointageForm({
   const lottieRef = useRef<LottieRefCurrentProps>(null);
 
   const [error, setError] = useState<string | null>(null);
-  const [successTitle, setSuccessTitle] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
   const [tokenData, setTokenData] = useState<TokenData>(initialTokenData);
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
     null,
@@ -125,8 +124,6 @@ export function PointageForm({
   const handleSelectEmployee = async (employeeId: string) => {
     setSelectedEmployeeId(employeeId);
     setError(null);
-    setSuccessTitle(null);
-    setSuccessMessage(null);
     // Sauvegarder dans le cookie
     await saveEmployeeCookieAction(employeeId);
   };
@@ -137,8 +134,6 @@ export function PointageForm({
 
     setIsLoading(true);
     setError(null);
-    setSuccessTitle(null);
-    setSuccessMessage(null);
 
     const result = await createEmployeeAction({
       firstName,
@@ -176,8 +171,6 @@ export function PointageForm({
     setSubmittingAction(action);
     setIsLoading(true);
     setError(null);
-    setSuccessTitle(null);
-    setSuccessMessage(null);
 
     const result = await createClockInAction({
       siteId: tokenData.siteId,
@@ -192,30 +185,7 @@ export function PointageForm({
       const isResuming = action === "START" && lastClockIn?.action === "PAUSE";
 
       // Définir le titre et le message selon l'action
-      if (action === "START") {
-        if (isResuming) {
-          setSuccessTitle("Travail repris");
-          setSuccessMessage(
-            "Vous avez repris votre travail après la pause. Pour réeffectuer une action, scannez le QR code.",
-          );
-        } else {
-          setSuccessTitle("Travail commencé");
-          setSuccessMessage(
-            "Votre journée de travail a commencé. Pour réeffectuer une action, scannez le QR code.",
-          );
-        }
-      } else if (action === "PAUSE") {
-        setSuccessTitle("Travail en pause");
-        setSuccessMessage(
-          "Vous êtes en pause, bon repos ! Pour réeffectuer une action, scannez le QR code.",
-        );
-      } else if (action === "END") {
-        setSuccessTitle("Travail terminé");
-        setSuccessMessage(
-          "Votre journée de travail est terminée, bon retour ! Pour réeffectuer une action, scannez le QR code.",
-        );
-      }
-
+      setSuccess(true);
       // Recharger le dernier pointage
       await loadLastClockIn(selectedEmployeeId);
 
@@ -283,7 +253,7 @@ export function PointageForm({
           </motion.div>
         )}
 
-        {successTitle && successMessage && (
+        {success && (
           <motion.div
             key="success"
             initial="hidden"
