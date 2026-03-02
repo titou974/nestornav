@@ -25,6 +25,7 @@ import {
 import Lottie, { LottieRefCurrentProps } from "lottie-react";
 import checkAnimation from "../../assets/Success.json";
 import { PlayIcon, PauseIcon, StopIcon } from "@heroicons/react/24/solid";
+import { FR_STRINGS } from "@/constants/fr.strings";
 
 interface TokenData {
   siteId: string;
