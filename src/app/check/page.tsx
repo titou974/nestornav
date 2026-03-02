@@ -94,6 +94,30 @@ export default async function PointagePage({
     );
   }
 
+  // Vérifier si ce token a déjà été utilisé (existe dans un ClockIn)
+  const existingClockIn = await prisma.clockIn.findUnique({
+    where: { token },
+  });
+
+  if (existingClockIn) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+        <div className="w-full max-w-md">
+          <Alert status="danger">
+            <Alert.Indicator />
+            <Alert.Content>
+              <Alert.Title>Token déjà utilisé</Alert.Title>
+              <Alert.Description>
+                Ce QR code a déjà été utilisé pour un pointage. Veuillez
+                rescanner le QR code pour effectuer une nouvelle action.
+              </Alert.Description>
+            </Alert.Content>
+          </Alert>
+        </div>
+      </div>
+    );
+  }
+
   // Récupérer les employés du tenant
   const employees = await prisma.employee.findMany({
     where: { tenantId, isActive: true },

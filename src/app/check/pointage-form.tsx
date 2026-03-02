@@ -219,6 +219,7 @@ export function PointageForm({
       // Recharger le dernier pointage
       await loadLastClockIn(selectedEmployeeId);
 
+      // Masquer le formulaire complètement après succès
       setShowForm(false);
     } else {
       setError(result.error || FR_STRINGS.error.generic);
