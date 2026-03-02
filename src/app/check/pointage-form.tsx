@@ -430,7 +430,7 @@ export function PointageForm({
                   </h2>
                   {lastClockIn && (
                     <p className="text-xs text-muted">
-                      {FR_STRINGS.pointageForm.lastAction} :{" "}
+                      {FR_STRINGS.pointageForm.lastAction}{" "}
                       {lastClockIn.action === "START"
                         ? "Début"
                         : lastClockIn.action === "PAUSE"
