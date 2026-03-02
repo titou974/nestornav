@@ -2,6 +2,7 @@ import { Alert } from "@heroui/react";
 import { PointageForm } from "./pointage-form";
 import { prisma } from "@/lib/prisma";
 import { Employee } from "@/types/database";
+import { QrCodeAnimation } from "@/components/qr-code-animation";
 
 interface PointagePageProps {
   searchParams: Promise<{ token?: string }>;
@@ -102,7 +103,7 @@ export default async function PointagePage({
   if (existingClockIn) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md space-y-4">
           <Alert status="danger">
             <Alert.Indicator />
             <Alert.Content>
@@ -113,6 +114,7 @@ export default async function PointagePage({
               </Alert.Description>
             </Alert.Content>
           </Alert>
+          <QrCodeAnimation />
         </div>
       </div>
     );
