@@ -181,10 +181,6 @@ export function PointageForm({
     });
 
     if (result.success) {
-      // Déterminer si c'est une reprise après pause
-      const isResuming = action === "START" && lastClockIn?.action === "PAUSE";
-
-      // Définir le titre et le message selon l'action
       setSuccess(true);
       // Recharger le dernier pointage
       await loadLastClockIn(selectedEmployeeId);
@@ -437,7 +433,10 @@ export function PointageForm({
                           ? "Pause"
                           : "Fin"}
                       {" le "}
-                      {new Date(lastClockIn.timestamp).toLocaleString("fr-FR")}
+                      {new Date(lastClockIn.timestamp).toLocaleString("fr-FR", {
+                        dateStyle: "short",
+                        timeStyle: "short",
+                      })}
                     </p>
                   )}
                 </div>
