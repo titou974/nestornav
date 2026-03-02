@@ -44,6 +44,11 @@ export const FR_STRINGS = {
     lastAction: "Dernière action :",
     lastActionAt: "le",
     selectEmployee: "Sélectionnez votre nom",
+    selectEmployeeDescription: "Choisissez votre nom dans la liste",
+    selectEmployeePlaceholder: "Sélectionnez un employé",
+    employee: "Employé",
+    employees: "Employés",
+    selectAction: "Choisissez l'action que vous souhaitez effectuer",
     newCollaborator: "+ Nouveau collaborateur",
     loading: "Chargement...",
   },
@@ -51,14 +56,15 @@ export const FR_STRINGS = {
   // Formulaire de création d'employé
   createEmployee: {
     title: "Nouveau collaborateur",
+    description: "Remplissez vos informations pour créer votre profil",
     firstName: "Prénom",
-    firstNamePlaceholder: "Entrez le prénom",
+    firstNamePlaceholder: "Votre prénom",
     firstNameRequired: "Le prénom est requis",
     lastName: "Nom",
-    lastNamePlaceholder: "Entrez le nom",
+    lastNamePlaceholder: "Votre nom",
     lastNameRequired: "Le nom est requis",
     cancel: "Annuler",
-    create: "Créer",
+    create: "Créer mon profil",
   },
 
   // Actions de pointage (traduction des valeurs)

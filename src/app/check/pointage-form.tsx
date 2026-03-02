@@ -42,22 +42,22 @@ interface PointageFormProps {
 const actions = [
   {
     value: "START" as ClockInAction,
-    label: "Début",
-    description: "Commencer la journée",
+    label: FR_STRINGS.actions.start.label,
+    description: FR_STRINGS.actions.start.description,
     icon: <PlayIcon className="w-4 h-4" />,
     variant: "primary" as const,
   },
   {
     value: "PAUSE" as ClockInAction,
-    label: "Pause",
-    description: "Prendre une pause",
+    label: FR_STRINGS.actions.pause.label,
+    description: FR_STRINGS.actions.pause.description,
     icon: <PauseIcon className="w-4 h-4" />,
     variant: "secondary" as const,
   },
   {
     value: "END" as ClockInAction,
-    label: "Fin",
-    description: "Terminer la journée",
+    label: FR_STRINGS.actions.end.label,
+    description: FR_STRINGS.actions.end.description,
     icon: <StopIcon className="w-4 h-4" />,
     variant: "danger" as const,
   },
@@ -147,7 +147,7 @@ export function PointageForm({
     });
 
     if (!result.success) {
-      setError(result.error || "Erreur lors de la création de l'employé");
+      setError(result.error || FR_STRINGS.error.createEmployee);
       setIsLoading(false);
       return;
     }
@@ -221,7 +221,7 @@ export function PointageForm({
 
       setShowForm(false);
     } else {
-      setError(result.error || "Une erreur est survenue");
+      setError(result.error || FR_STRINGS.error.generic);
     }
 
     setIsLoading(false);
@@ -253,10 +253,6 @@ export function PointageForm({
     return false;
   };
 
-  const getSelectedEmployee = () => {
-    return tokenData.employees.find((e) => e.id === selectedEmployeeId);
-  };
-
   const fadeInVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -279,7 +275,7 @@ export function PointageForm({
             <Alert status="danger">
               <Alert.Indicator />
               <Alert.Content>
-                <Alert.Title>Erreur</Alert.Title>
+                <Alert.Title>{FR_STRINGS.error.title}</Alert.Title>
                 <Alert.Description>{error}</Alert.Description>
               </Alert.Content>
             </Alert>
@@ -298,14 +294,16 @@ export function PointageForm({
             <Alert status="success">
               <Alert.Indicator />
               <Alert.Content>
-                <Alert.Title>{successTitle}</Alert.Title>
-                <Alert.Description>{successMessage}</Alert.Description>
+                <Alert.Title>{FR_STRINGS.success.title}</Alert.Title>
+                <Alert.Description>
+                  {FR_STRINGS.success.description}
+                </Alert.Description>
               </Alert.Content>
             </Alert>
             <Lottie
               lottieRef={lottieRef}
               animationData={checkAnimation}
-              className="w-24 h-24 mx-auto"
+              className="w-40 h-40 mx-auto mt-10"
               autoPlay={true}
               loop={false}
             />
@@ -329,16 +327,13 @@ export function PointageForm({
             <div className="space-y-4">
               <div>
                 <h2 className="text-xl font-semibold mb-2">
-                  Sélectionnez votre nom
+                  {FR_STRINGS.pointageForm.selectEmployee}
                 </h2>
-                <p className="text-sm text-muted">
-                  Choisissez votre nom dans la liste
-                </p>
               </div>
 
               <Select
                 name="employee"
-                placeholder="Sélectionnez un employé"
+                placeholder={FR_STRINGS.pointageForm.selectEmployeePlaceholder}
                 value={selectedEmployeeId || undefined}
                 onChange={async (value) => {
                   if (value) {
@@ -346,13 +341,12 @@ export function PointageForm({
                   }
                 }}
               >
-                <Label>Employé</Label>
                 <Select.Trigger>
                   <Select.Value />
                   <Select.Indicator />
                 </Select.Trigger>
                 <Select.Popover>
-                  <ListBox aria-label="Employés">
+                  <ListBox aria-label={FR_STRINGS.pointageForm.employees}>
                     {tokenData.employees.map((employee) => (
                       <ListBox.Item
                         key={employee.id}
@@ -374,7 +368,7 @@ export function PointageForm({
                   fullWidth
                   onPress={() => setShowNewEmployeeForm(true)}
                 >
-                  + Nouvel employé
+                  {FR_STRINGS.pointageForm.newCollaborator}
                 </Button>
               )}
             </div>
@@ -383,9 +377,11 @@ export function PointageForm({
             {showNewEmployeeForm && (
               <div className="border-t border-border pt-6 space-y-4">
                 <div>
-                  <h2 className="text-xl font-semibold mb-2">Nouvel employé</h2>
+                  <h2 className="text-xl font-semibold mb-2">
+                    {FR_STRINGS.createEmployee.title}
+                  </h2>
                   <p className="text-sm text-muted">
-                    Remplissez vos informations pour créer votre profil
+                    {FR_STRINGS.createEmployee.description}
                   </p>
                 </div>
 
@@ -399,9 +395,15 @@ export function PointageForm({
                     value={firstName}
                     onChange={setFirstName}
                   >
-                    <Label>Prénom</Label>
-                    <Input placeholder="Votre prénom" />
-                    <FieldError />
+                    <Label>{FR_STRINGS.createEmployee.firstName}</Label>
+                    <Input
+                      placeholder={
+                        FR_STRINGS.createEmployee.firstNamePlaceholder
+                      }
+                    />
+                    <FieldError>
+                      {FR_STRINGS.createEmployee.firstNameRequired}
+                    </FieldError>
                   </TextField>
 
                   <TextField
@@ -410,9 +412,15 @@ export function PointageForm({
                     value={lastName}
                     onChange={setLastName}
                   >
-                    <Label>Nom</Label>
-                    <Input placeholder="Votre nom" />
-                    <FieldError />
+                    <Label>{FR_STRINGS.createEmployee.lastName}</Label>
+                    <Input
+                      placeholder={
+                        FR_STRINGS.createEmployee.lastNamePlaceholder
+                      }
+                    />
+                    <FieldError>
+                      {FR_STRINGS.createEmployee.lastNameRequired}
+                    </FieldError>
                   </TextField>
 
                   <div className="flex gap-2 pt-2">
@@ -423,7 +431,7 @@ export function PointageForm({
                       isPending={isLoading}
                       isDisabled={!firstName || !lastName}
                     >
-                      Créer mon profil
+                      {FR_STRINGS.createEmployee.create}
                     </Button>
                     <Button
                       type="button"
@@ -435,7 +443,7 @@ export function PointageForm({
                       }}
                       isDisabled={isLoading}
                     >
-                      Annuler
+                      {FR_STRINGS.createEmployee.cancel}
                     </Button>
                   </div>
                 </Form>
@@ -447,22 +455,11 @@ export function PointageForm({
               <div className="border-t border-border pt-6 space-y-4">
                 <div className="space-y-2">
                   <h2 className="text-xl font-semibold">
-                    Sélectionnez une action
+                    {FR_STRINGS.pointageForm.title}
                   </h2>
-                  <p className="text-sm text-muted">
-                    {getSelectedEmployee() && (
-                      <span className="font-medium">
-                        {getSelectedEmployee()!.firstName}{" "}
-                        {getSelectedEmployee()!.lastName}
-                      </span>
-                    )}
-                    {" - "}
-                    Choisissez l&apos;action que vous souhaitez effectuer
-                  </p>
-
                   {lastClockIn && (
                     <p className="text-xs text-muted">
-                      Dernier pointage :{" "}
+                      {FR_STRINGS.pointageForm.lastAction} :{" "}
                       {lastClockIn.action === "START"
                         ? "Début"
                         : lastClockIn.action === "PAUSE"
@@ -480,9 +477,11 @@ export function PointageForm({
                     const isResuming =
                       action.value === "START" &&
                       lastClockIn?.action === "PAUSE";
-                    const label = isResuming ? "Reprendre" : action.label;
+                    const label = isResuming
+                      ? FR_STRINGS.actions.resume.label
+                      : action.label;
                     const description = isResuming
-                      ? "Reprendre le travail"
+                      ? FR_STRINGS.actions.resume.description
                       : action.description;
 
                     return (

@@ -117,7 +117,6 @@ export default async function PointagePage({
     <div className="min-h-screen flex items-start justify-start p-4 bg-background flex-col gap-6">
       {tokenData && (
         <div className="bg-[#111111] rounded-lg border border-border p-4 w-full max-w-md justify-self-start mx-auto">
-          <div className="text-sm text-muted">Bienvenue sur le site de</div>
           <div className="text-xl font-semibold">{tokenData.siteName}</div>
         </div>
       )}
