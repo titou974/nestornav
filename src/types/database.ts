@@ -57,8 +57,14 @@ export interface ClockIn {
   action: ClockInAction;
   timestamp: Date;
   createdAt: Date;
+  // QR Token fields (fusionné depuis QrToken)
+  token: string;
+  tokenUsedAt: Date;
+  tokenExpiresAt: Date;
 }
 
+// QrToken a été fusionné dans ClockIn - conservé pour compatibilité temporaire
+// @deprecated Utiliser ClockIn à la place
 export interface QrToken {
   id: string;
   tenantId: string;
@@ -138,7 +144,6 @@ export interface TenantWithAll extends Tenant {
   sites: Site[];
   employees: Employee[];
   clockIns: ClockIn[];
-  qrTokens: QrToken[];
   anomalies: Anomaly[];
 }
 
@@ -146,6 +151,7 @@ export interface SiteWithClockIns extends Site {
   clockIns: ClockIn[];
 }
 
+// @deprecated QrToken a été fusionné dans ClockIn
 export interface SiteWithQrTokens extends Site {
   qrTokens: QrToken[];
 }

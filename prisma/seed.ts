@@ -8,7 +8,6 @@ async function main() {
   // Clean existing data
   console.log("🧹 Cleaning existing data...");
   await prisma.clockIn.deleteMany();
-  await prisma.qrToken.deleteMany();
   await prisma.anomaly.deleteMany();
   await prisma.employee.deleteMany();
   await prisma.site.deleteMany();
@@ -111,6 +110,8 @@ async function main() {
   console.log("⏰ Creating clock-ins...");
   const today = new Date();
   today.setHours(8, 0, 0, 0);
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const clockIns = await Promise.all([
     // Pierre - Full day at site 1
@@ -121,6 +122,9 @@ async function main() {
         employeeId: employees[0].id,
         action: "START",
         timestamp: new Date(today.getTime()),
+        token: `seed-token-${Date.now()}-1`,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: tomorrow,
       },
     }),
     prisma.clockIn.create({
@@ -130,6 +134,9 @@ async function main() {
         employeeId: employees[0].id,
         action: "PAUSE",
         timestamp: new Date(today.getTime() + 4 * 60 * 60 * 1000), // 12:00
+        token: `seed-token-${Date.now()}-2`,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: tomorrow,
       },
     }),
     prisma.clockIn.create({
@@ -139,6 +146,9 @@ async function main() {
         employeeId: employees[0].id,
         action: "START",
         timestamp: new Date(today.getTime() + 5 * 60 * 60 * 1000), // 13:00
+        token: `seed-token-${Date.now()}-3`,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: tomorrow,
       },
     }),
     prisma.clockIn.create({
@@ -148,6 +158,9 @@ async function main() {
         employeeId: employees[0].id,
         action: "END",
         timestamp: new Date(today.getTime() + 9 * 60 * 60 * 1000), // 17:00
+        token: `seed-token-${Date.now()}-4`,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: tomorrow,
       },
     }),
 
@@ -159,6 +172,9 @@ async function main() {
         employeeId: employees[1].id,
         action: "START",
         timestamp: new Date(today.getTime() + 0.5 * 60 * 60 * 1000), // 08:30
+        token: `seed-token-${Date.now()}-5`,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: tomorrow,
       },
     }),
 
@@ -170,49 +186,17 @@ async function main() {
         employeeId: employees[2].id,
         action: "START",
         timestamp: new Date(today.getTime() + 0.25 * 60 * 60 * 1000), // 08:15
+        token: `seed-token-${Date.now()}-6`,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: tomorrow,
       },
     }),
   ]);
 
   console.log(`✅ Created ${clockIns.length} clock-ins`);
 
-  // Create QR tokens
-  console.log("🔐 Creating QR tokens...");
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  const qrTokens = await Promise.all([
-    prisma.qrToken.create({
-      data: {
-        tenantId: tenant.id,
-        siteId: site1.id,
-        token: "QR-SITE1-ACTIVE-001",
-        used: false,
-        expiresAt: tomorrow,
-      },
-    }),
-    prisma.qrToken.create({
-      data: {
-        tenantId: tenant.id,
-        siteId: site2.id,
-        token: "QR-SITE2-ACTIVE-001",
-        used: false,
-        expiresAt: tomorrow,
-      },
-    }),
-    prisma.qrToken.create({
-      data: {
-        tenantId: tenant.id,
-        siteId: site1.id,
-        token: "QR-SITE1-USED-001",
-        used: true,
-        usedAt: new Date(),
-        expiresAt: tomorrow,
-      },
-    }),
-  ]);
-
-  console.log(`✅ Created ${qrTokens.length} QR tokens`);
+  // Note: QR tokens sont maintenant intégrés dans ClockIn
+  console.log("✅ QR tokens are now integrated into ClockIn records");
 
   // Create anomaly
   console.log("⚠️  Creating anomaly...");
@@ -248,8 +232,7 @@ async function main() {
   console.log(
     `   - ${employees.length} employees (${employees.filter((e: { isActive: boolean }) => e.isActive).length} active)`,
   );
-  console.log(`   - ${clockIns.length} clock-ins`);
-  console.log(`   - ${qrTokens.length} QR tokens`);
+  console.log(`   - ${clockIns.length} clock-ins (with integrated tokens)`);
   console.log(`   - 1 anomaly`);
   console.log(`   - 1 user`);
   console.log("\n🔐 Login credentials:");

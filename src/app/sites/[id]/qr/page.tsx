@@ -18,20 +18,11 @@ export default async function QRPage({ params }: QRPageProps) {
     notFound();
   }
 
-  // Créer un nouveau token
+  // Créer un token encodé avec les infos du site
   const token = generateToken();
-  const expiresAt = new Date();
-  expiresAt.setHours(expiresAt.getHours() + 24); // Token valide 24h
+  const tokenData = `${site.id}:${site.tenantId}:${token}`;
+  const encodedToken = Buffer.from(tokenData).toString("base64url");
 
-  await prisma.qrToken.create({
-    data: {
-      token,
-      siteId: site.id,
-      tenantId: site.tenantId,
-      expiresAt,
-    },
-  });
-
-  // Rediriger vers le formulaire avec le token
-  redirect(`/check?token=${token}`);
+  // Rediriger vers le formulaire avec le token encodé
+  redirect(`/check?token=${encodedToken}`);
 }

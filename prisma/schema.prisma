@@ -31,7 +31,6 @@ model Tenant {
   sites     Site[]
   employees Employee[]
   clockIns  ClockIn[]
-  qrTokens  QrToken[]
   anomalies Anomaly[]
   users     User[]
 
@@ -51,7 +50,6 @@ model Site {
   // Relations
   tenant   Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   clockIns ClockIn[]
-  qrTokens QrToken[]
 
   @@index([tenantId])
   @@map("sites")
@@ -77,7 +75,7 @@ model Employee {
   @@map("employees")
 }
 
-/// ClockIn (Pointage) - Time tracking event
+/// ClockIn (Pointage) - Time tracking event with QR token info
 model ClockIn {
   id         String        @id @default(cuid())
   tenantId   String
@@ -86,6 +84,11 @@ model ClockIn {
   action     ClockInAction
   timestamp  DateTime      @default(now())
   createdAt  DateTime      @default(now())
+  
+  // QR Token fields (fusionné depuis QrToken)
+  token      String        @unique
+  tokenUsedAt DateTime     @default(now())
+  tokenExpiresAt DateTime
 
   // Relations
   tenant   Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
@@ -94,27 +97,10 @@ model ClockIn {
   anomalies Anomaly[]
 
   @@index([tenantId, siteId, employeeId, timestamp])
+  @@index([token, tokenExpiresAt])
   @@map("clock_ins")
 }
 
-/// QrToken (Token QR) - Single-use token for secure clock-in
-model QrToken {
-  id        String    @id @default(cuid())
-  tenantId  String
-  siteId    String
-  token     String    @unique
-  used      Boolean   @default(false)
-  usedAt    DateTime?
-  expiresAt DateTime
-  createdAt DateTime  @default(now())
-
-  // Relations
-  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  site   Site   @relation(fields: [siteId], references: [id], onDelete: Cascade)
-
-  @@index([token, used, expiresAt])
-  @@map("qr_tokens")
-}
 
 /// Anomaly (Anomalie) - Detected suspicious pattern
 model Anomaly {

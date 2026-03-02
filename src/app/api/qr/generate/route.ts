@@ -31,30 +31,26 @@ export async function POST(request: NextRequest) {
     const expiresAt = new Date();
     expiresAt.setHours(expiresAt.getHours() + expiresInHours);
 
-    // Créer l'entrée QrToken dans la DB
-    const qrToken = await prisma.qrToken.create({
-      data: {
-        tenantId,
-        siteId,
-        token,
-        expiresAt,
-      },
-    });
+    // Note: Le token n'est plus stocké dans une table séparée
+    // Il sera créé dans ClockIn lors du premier pointage
+    // On encode les infos du site dans le token pour validation ultérieure
+    const tokenData = `${siteId}:${tenantId}:${token}`;
+    const encodedToken = Buffer.from(tokenData).toString("base64url");
 
-    // Générer l'URL avec le token
+    // Générer l'URL avec le token encodé
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-    const pointageUrl = `${baseUrl}/check?token=${token}`;
+    const pointageUrl = `${baseUrl}/check?token=${encodedToken}`;
 
     // Générer le QR code
     const qrCodeDataURL = await generateQRCode(pointageUrl);
 
     return successResponse(
       {
-        token: qrToken.token,
+        token: encodedToken,
         qrCodeDataURL,
         pointageUrl,
-        expiresAt: qrToken.expiresAt,
-        siteId: qrToken.siteId,
+        expiresAt,
+        siteId,
         siteName: site.name,
       },
       201,

@@ -31,7 +31,7 @@ interface TokenData {
   siteId: string;
   siteName: string;
   tenantId: string;
-  tokenId: string;
+  token: string;
   employees: Employee[];
 }
 
@@ -184,7 +184,7 @@ export function PointageForm({
       employeeId: selectedEmployeeId,
       action,
       tenantId: tokenData.tenantId,
-      tokenId: tokenData.tokenId,
+      token: tokenData.token,
     });
 
     if (result.success) {

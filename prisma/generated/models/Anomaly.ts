@@ -477,6 +477,10 @@ export type EnumAnomalyStatusFieldUpdateOperationsInput = {
   set?: $Enums.AnomalyStatus
 }
 
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
 export type AnomalyCreateWithoutTenantInput = {
   id?: string
   type: $Enums.AnomalyType

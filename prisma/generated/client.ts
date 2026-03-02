@@ -56,14 +56,9 @@ export type Site = Prisma.SiteModel
 export type Employee = Prisma.EmployeeModel
 /**
  * Model ClockIn
- * ClockIn (Pointage) - Time tracking event
+ * ClockIn (Pointage) - Time tracking event with QR token info
  */
 export type ClockIn = Prisma.ClockInModel
-/**
- * Model QrToken
- * QrToken (Token QR) - Single-use token for secure clock-in
- */
-export type QrToken = Prisma.QrTokenModel
 /**
  * Model Anomaly
  * Anomaly (Anomalie) - Detected suspicious pattern

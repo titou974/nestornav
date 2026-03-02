@@ -7,45 +7,51 @@ import { cookies } from "next/headers";
 
 /**
  * Valider un token QR et récupérer les informations du site et des employés
+ * Le token est maintenant encodé avec les infos du site: siteId:tenantId:randomToken
  */
-export async function validateTokenAction(token: string) {
+export async function validateTokenAction(encodedToken: string) {
   try {
-    const qrToken = await prisma.qrToken.findUnique({
-      where: { token },
-      include: { site: true },
-    });
+    // Décoder le token pour extraire siteId, tenantId et token
+    let siteId: string;
+    let tenantId: string;
+    let token: string;
 
-    if (!qrToken) {
+    try {
+      const decoded = Buffer.from(encodedToken, "base64url").toString("utf-8");
+      const parts = decoded.split(":");
+
+      if (parts.length !== 3) {
+        return { success: false, error: "Format de token invalide" };
+      }
+
+      [siteId, tenantId, token] = parts;
+    } catch (decodeError) {
       return { success: false, error: "Token invalide" };
     }
 
-    if (qrToken.used) {
-      return { success: false, error: "Token déjà utilisé" };
-    }
-
-    if (new Date() > qrToken.expiresAt) {
-      return { success: false, error: "Token expiré" };
-    }
-
-    // Marquer comme utilisé
-    await prisma.qrToken.update({
-      where: { id: qrToken.id },
-      data: { used: true, usedAt: new Date() },
+    // Vérifier que le site existe et appartient au tenant
+    const site = await prisma.site.findFirst({
+      where: { id: siteId, tenantId },
     });
+
+    if (!site) {
+      return { success: false, error: "Site non trouvé ou token invalide" };
+    }
 
     // Récupérer les employés du tenant
     const employees = await prisma.employee.findMany({
-      where: { tenantId: qrToken.tenantId, isActive: true },
+      where: { tenantId, isActive: true },
       orderBy: { firstName: "asc" },
     });
 
     return {
       success: true,
       data: {
-        siteId: qrToken.siteId,
-        siteName: qrToken.site.name,
-        tenantId: qrToken.tenantId,
+        siteId,
+        siteName: site.name,
+        tenantId,
         employees,
+        token: encodedToken, // Passer le token encodé pour la création du ClockIn
       },
     };
   } catch (error) {
@@ -151,14 +157,14 @@ export async function getEmployeeCookieAction() {
 }
 
 /**
- * Créer un pointage
+ * Créer un pointage avec token intégré
  */
 export async function createClockInAction(data: {
   siteId: string;
   employeeId: string;
   action: "START" | "PAUSE" | "END";
   tenantId: string;
-  tokenId: string;
+  token: string;
 }) {
   try {
     const validated = createClockInSchema.parse({
@@ -167,21 +173,21 @@ export async function createClockInAction(data: {
       action: data.action,
     });
 
+    // Générer un token unique pour ce pointage
+    const uniqueToken = `${data.token}-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+
     const clockIn = await prisma.clockIn.create({
       data: {
         ...validated,
         tenantId: data.tenantId,
+        token: uniqueToken,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 an
       },
       include: {
         employee: true,
         site: true,
       },
-    });
-
-    // Marquer le token comme utilisé après le pointage réussi
-    await prisma.qrToken.update({
-      where: { id: data.tokenId },
-      data: { used: true, usedAt: new Date() },
     });
 
     return { success: true, data: clockIn };

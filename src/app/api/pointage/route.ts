@@ -19,6 +19,11 @@ export async function POST(request: NextRequest) {
       return successResponse({ success: false, error: "Site non trouvé" }, 404);
     }
 
+    // Générer un token unique pour ce pointage
+    const uniqueToken = `api-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+
     const clockIn = await prisma.clockIn.create({
       data: {
         tenantId: site.tenantId,
@@ -26,6 +31,9 @@ export async function POST(request: NextRequest) {
         employeeId: validated.employeeId,
         action: validated.action,
         timestamp: validated.timestamp || new Date(),
+        token: uniqueToken,
+        tokenUsedAt: new Date(),
+        tokenExpiresAt: tomorrow,
       },
       include: {
         employee: true,
