@@ -7,14 +7,14 @@ import { handleApiError } from "@/lib/error-handler";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const tenantId = await getTenantId();
     const { id } = await params;
 
-    const site = await prisma.site.findFirst({
-      where: { id, tenantId },
+    // Accès public - pas besoin d'authentification pour récupérer un site
+    const site = await prisma.site.findUnique({
+      where: { id },
     });
 
     if (!site) {
@@ -29,7 +29,7 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const tenantId = await getTenantId();
@@ -59,7 +59,7 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const tenantId = await getTenantId();

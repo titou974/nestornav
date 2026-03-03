@@ -239,7 +239,7 @@ export function PointageForm({
             variants={fadeInVariants}
             transition={{ duration: 0.3 }}
           >
-            <Alert status="danger">
+            <Alert status="danger" className="rounded-lg">
               <Alert.Indicator />
               <Alert.Content>
                 <Alert.Title>{FR_STRINGS.error.title}</Alert.Title>
@@ -258,7 +258,7 @@ export function PointageForm({
             variants={fadeInVariants}
             transition={{ duration: 0.3 }}
           >
-            <Alert status="success">
+            <Alert status="success" className="rounded-lg">
               <Alert.Indicator />
               <Alert.Content>
                 <Alert.Title>{FR_STRINGS.success.title}</Alert.Title>
@@ -292,12 +292,9 @@ export function PointageForm({
           >
             {/* Sélection employé */}
             <div className="space-y-4">
-              <div>
-                <h2 className="text-xl font-semibold mb-2">
-                  {FR_STRINGS.pointageForm.selectEmployee}
-                </h2>
-              </div>
-
+              <h2 className="text-xl font-semibold mb-2">
+                {FR_STRINGS.pointageForm.selectEmployee}
+              </h2>
               <Select
                 name="employee"
                 placeholder={FR_STRINGS.pointageForm.selectEmployeePlaceholder}
@@ -340,7 +337,6 @@ export function PointageForm({
               )}
             </div>
 
-            {/* Formulaire nouvel employé */}
             {showNewEmployeeForm && (
               <div className="border-t border-border pt-6 space-y-4">
                 <div>

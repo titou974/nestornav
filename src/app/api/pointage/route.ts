@@ -1,50 +1,55 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { createClockInSchema } from "@/lib/validations";
 import { successResponse } from "@/lib/api-response";
 import { handleApiError } from "@/lib/error-handler";
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const validated = createClockInSchema.parse(body);
+    const { employeeId, action, timestamp, qrTokenId } = body;
 
-    // Récupérer le site pour obtenir le tenantId
-    const site = await prisma.site.findUnique({
-      where: { id: validated.siteId },
-      select: { tenantId: true },
+    // Vérifier que le QrToken existe et n'est pas encore consommé
+    const qrToken = await prisma.qrToken.findUnique({
+      where: { id: qrTokenId },
+      include: { site: true },
     });
 
-    if (!site) {
-      return successResponse({ success: false, error: "Site non trouvé" }, 404);
+    if (!qrToken) {
+      return successResponse(
+        { success: false, error: "Token non trouvé" },
+        404,
+      );
     }
 
-    // Créer un QrToken puis le ClockIn
-    const uniqueToken = `api-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    if (qrToken.consumed) {
+      return successResponse(
+        { success: false, error: "Token déjà utilisé" },
+        400,
+      );
+    }
 
-    // Créer le QrToken
-    const qrToken = await prisma.qrToken.create({
+    if (new Date() > qrToken.expiresAt) {
+      return successResponse({ success: false, error: "Token expiré" }, 400);
+    }
+
+    // Marquer le token comme consommé
+    await prisma.qrToken.update({
+      where: { id: qrToken.id },
       data: {
-        tenantId: site.tenantId,
-        siteId: validated.siteId,
-        token: uniqueToken,
         consumed: true,
         consumedAt: new Date(),
-        expiresAt: tomorrow,
       },
     });
 
-    // Créer le ClockIn avec le qrTokenId
+    // Créer le ClockIn avec le qrTokenId existant
     const clockIn = await prisma.clockIn.create({
       data: {
-        tenantId: site.tenantId,
-        siteId: validated.siteId,
-        employeeId: validated.employeeId,
+        tenantId: qrToken.tenantId,
+        siteId: qrToken.siteId,
+        employeeId,
+        action,
+        timestamp: timestamp || new Date(),
         qrTokenId: qrToken.id,
-        action: validated.action,
-        timestamp: validated.timestamp || new Date(),
       },
       include: {
         employee: true,

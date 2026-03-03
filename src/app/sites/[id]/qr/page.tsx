@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
 import { generateToken } from "@/lib/qr-generator";
+import { getSiteById } from "@/utils/queries/sites";
+import { createQrToken } from "@/utils/mutations/qr-tokens";
 
 interface QRPageProps {
   params: Promise<{ id: string }>;
@@ -9,10 +10,8 @@ interface QRPageProps {
 export default async function QRPage({ params }: QRPageProps) {
   const { id } = await params;
 
-  // Vérifier que le site existe
-  const site = await prisma.site.findUnique({
-    where: { id },
-  });
+  // Vérifier que le site existe (API publique)
+  const site = await getSiteById(id);
 
   if (!site) {
     notFound();
@@ -23,13 +22,11 @@ export default async function QRPage({ params }: QRPageProps) {
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + 24); // Token valide 24h
 
-  await prisma.qrToken.create({
-    data: {
-      token,
-      siteId: site.id,
-      tenantId: site.tenantId,
-      expiresAt,
-    },
+  await createQrToken({
+    token,
+    siteId: site.id,
+    tenantId: site.tenantId,
+    expiresAt,
   });
 
   // Rediriger vers le formulaire avec le token

@@ -24,7 +24,7 @@ export default function RootLayout({
   return (
     <html lang="fr" data-theme="nestor-dark">
       <body className={`${inter.variable} font-sans antialiased`}>
-        <Providers>{children}</Providers>
+        {children}
       </body>
     </html>
   );

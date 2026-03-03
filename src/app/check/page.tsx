@@ -1,8 +1,10 @@
 import { Alert } from "@heroui/react";
 import { PointageForm } from "./pointage-form";
-import { prisma } from "@/lib/prisma";
 import { Employee } from "@/types/database";
 import { QrCodeAnimation } from "@/components/qr-code-animation";
+import { getQrTokenByToken } from "@/utils/queries/qr-tokens";
+import { getEmployeesByTenantId } from "@/utils/queries/employees";
+import { prisma } from "@/lib/prisma";
 
 interface PointagePageProps {
   searchParams: Promise<{ token?: string }>;
@@ -25,7 +27,7 @@ export default async function PointagePage({
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <div className="w-full ">
-          <Alert status="danger">
+          <Alert status="danger" className="rounded-lg">
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title>Token manquant</Alert.Title>
@@ -50,7 +52,7 @@ export default async function PointagePage({
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <div className="w-full max-w-md">
-          <Alert status="danger">
+          <Alert status="danger" className="rounded-lg">
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title>Token invalide</Alert.Title>
@@ -69,7 +71,7 @@ export default async function PointagePage({
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <div className="w-full max-w-md space-y-4">
-          <Alert status="danger">
+          <Alert status="danger" className="rounded-lg">
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title>Token déjà utilisé</Alert.Title>
@@ -90,7 +92,7 @@ export default async function PointagePage({
     return (
       <div className="min-h-screen flex items-center justify-center p-4 bg-background">
         <div className="w-full max-w-md space-y-4">
-          <Alert status="danger">
+          <Alert status="danger" className="rounded-lg">
             <Alert.Indicator />
             <Alert.Content>
               <Alert.Title>Token expiré</Alert.Title>
@@ -106,10 +108,7 @@ export default async function PointagePage({
   }
 
   // Récupérer les employés du tenant
-  const employees = await prisma.employee.findMany({
-    where: { tenantId: qrToken.tenantId, isActive: true },
-    orderBy: { firstName: "asc" },
-  });
+  const employees = await getEmployeesByTenantId(qrToken.tenantId);
 
   const tokenData: TokenData = {
     qrTokenId: qrToken.id,

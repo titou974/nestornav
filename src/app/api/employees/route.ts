@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getTenantId } from "@/lib/auth";
 import { createEmployeeSchema } from "@/lib/validations";
-import { successResponse } from "@/lib/api-response";
+import { successResponse, errorResponse } from "@/lib/api-response";
 import { handleApiError } from "@/lib/error-handler";
 
 export async function GET() {
@@ -22,15 +22,19 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    const tenantId = await getTenantId();
     const body = await request.json();
 
     const validated = createEmployeeSchema.parse(body);
 
+    // tenantId doit être fourni dans le body
+    if (!body.tenantId) {
+      return errorResponse("tenantId est requis", 400);
+    }
+
     const employee = await prisma.employee.create({
       data: {
         ...validated,
-        tenantId,
+        tenantId: body.tenantId,
       },
     });
 
