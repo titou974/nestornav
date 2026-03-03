@@ -12,9 +12,6 @@ export async function getLastClockIn(
 
   const response = await fetch(
     `${baseUrl}/api/clock-ins/last?employeeId=${employeeId}&siteId=${siteId}`,
-    {
-      next: { revalidate: 10 }, // Cache court car les pointages changent fréquemment
-    },
   );
 
   if (!response.ok) {
