@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { successResponse } from "@/lib/api-response";
 import { handleApiError } from "@/lib/error-handler";
 
-// Route publique pour créer des QR tokens
+export const dynamic = "force-static";
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

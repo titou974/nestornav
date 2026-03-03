@@ -3,7 +3,7 @@
 import { createEmployeeSchema } from "@/lib/validations";
 import { z } from "zod";
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { getLastClockIn } from "@/utils/queries/clock-ins";
 import { createEmployee } from "@/utils/mutations/employees";
 import { createClockIn } from "@/utils/mutations/clock-ins";
@@ -25,7 +25,7 @@ export async function createEmployeeAction(data: {
     });
 
     if (result.success) {
-      revalidatePath("/check");
+      revalidateTag(`employees-${data.tenantId}`, "max");
     }
 
     return result;
@@ -83,10 +83,6 @@ export async function getEmployeeCookieAction() {
   }
 }
 
-/**
- * Créer un pointage et marquer le token comme consommé
- * Utilise la mutation avec revalidateTag
- */
 export async function createClockInAction(data: {
   siteId: string;
   employeeId: string;

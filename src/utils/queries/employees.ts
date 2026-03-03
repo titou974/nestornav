@@ -10,7 +10,7 @@ export async function getEmployeesByTenantId(
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
   const response = await fetch(`${baseUrl}/api/employees/tenant/${tenantId}`, {
-    next: { revalidate: 60 }, // Cache pendant 60 secondes
+    next: { revalidate: 60, tags: [`employees-${tenantId}`] },
   });
 
   if (!response.ok) {
@@ -24,10 +24,7 @@ export async function getEmployeesByTenantId(
 /**
  * Récupérer un employé par son ID
  */
-export async function getEmployeeById(
-  id: string,
-  tenantId: string,
-): Promise<Employee | null> {
+export async function getEmployeeById(id: string): Promise<Employee | null> {
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
   const response = await fetch(`${baseUrl}/api/employees/${id}`, {

@@ -1,9 +1,5 @@
 import type { QrToken } from "@/types/database";
 
-/**
- * Récupérer un QrToken par son token avec le site associé
- * Pas de cache car les tokens sont à usage unique et éphémères
- */
 export async function getQrTokenByToken(
   token: string,
 ): Promise<
@@ -12,7 +8,7 @@ export async function getQrTokenByToken(
   const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
   const response = await fetch(`${baseUrl}/api/qr-tokens/${token}`, {
-    cache: "no-store", // Pas de cache pour les tokens
+    cache: "no-store",
   });
 
   if (!response.ok) {
@@ -23,9 +19,6 @@ export async function getQrTokenByToken(
   return data.data || null;
 }
 
-/**
- * Vérifier si un token est valide (existe, non consommé, non expiré)
- */
 export async function validateQrToken(token: string): Promise<{
   valid: boolean;
   qrToken?: QrToken & { site: { id: string; name: string; tenantId: string } };
